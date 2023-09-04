@@ -1,0 +1,16 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method TRITUM\\\\Turnstile\\\\Validation\\\\TurnstileValidator\\:\\:translateErrorMessage\\(\\) has parameter \\$arguments with no type specified\\.$#"
+			count: 1
+			path: ../Classes/Validation/TurnstileValidator.php
+
+		-
+			message: "#^Method TRITUM\\\\Turnstile\\\\Validation\\\\TurnstileValidator\\:\\:translateErrorMessage\\(\\) has parameter \\$extensionName with no type specified\\.$#"
+			count: 1
+			path: ../Classes/Validation/TurnstileValidator.php
+
+		-
+			message: "#^Method TRITUM\\\\Turnstile\\\\Validation\\\\TurnstileValidator\\:\\:translateErrorMessage\\(\\) has parameter \\$translateKey with no type specified\\.$#"
+			count: 1
+			path: ../Classes/Validation/TurnstileValidator.php

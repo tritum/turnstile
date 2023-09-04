@@ -1,0 +1,26 @@
+*.bat text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.less text eol=lf
+*.md text eol=lf
+*.php text eol=lf
+*.rst text eol=lf
+*.scss text eol=lf
+*.sh text eol=lf
+*.sql text eol=lf
+*.t3s text eol=lf
+*.tmpl text eol=lf
+*.ts text eol=lf
+*.txt text eol=lf
+*.typoscript text eol=lf
+*.xlf text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+.env.dist text eol=lf
+bin/* text eol=lf
+
+.* export-ignore
+/build/ export-ignore
+/Tests/ export-ignore

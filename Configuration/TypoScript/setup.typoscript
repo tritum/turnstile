@@ -1,0 +1,20 @@
+plugin {
+  tx_turnstile {
+    settings {
+      apiScript = {$plugin.tx_turnstile.settings.apiScript}
+      challengeTimeout = {$plugin.tx_turnstile.settings.challengeTimeout}
+      sendIp = {$plugin.tx_turnstile.settings.sendIp}
+      theme = {$plugin.tx_turnstile.settings.theme}
+      siteKey = {$plugin.tx_turnstile.settings.siteKey}
+      privateKey = {$plugin.tx_turnstile.settings.privateKey}
+    }
+  }
+
+  tx_form {
+    settings {
+      yamlConfigurations {
+        1692719161 = EXT:turnstile/Configuration/Form/Yaml/BaseSetup.yaml
+      }
+    }
+  }
+}

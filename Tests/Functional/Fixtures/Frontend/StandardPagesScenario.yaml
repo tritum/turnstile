@@ -1,0 +1,69 @@
+entitySettings:
+  '*':
+    nodeColumnName: pid
+    columnNames:
+      id: uid
+    defaultValues:
+      pid: 0
+  page:
+    isNode: true
+    tableName: pages
+    parentColumnName: pid
+    defaultValues:
+      hidden: 0
+  content:
+    tableName: tt_content
+    languageColumnNames:
+      - l18n_parent
+      - l10n_source
+    defaultValues:
+      hidden: 0
+  template:
+    tableName: sys_template
+entities:
+  page:
+    1:
+      self:
+        id: 1
+        title: 'waldhacker.dev'
+        slug: /
+        doktype: 1
+        is_siteroot: 1
+      entities:
+        template:
+          1:
+            self:
+              id: 1
+              title: main
+              root: 1
+              clear: 3
+              include_static_file: 'EXT:fluid_styled_content/Configuration/TypoScript/,EXT:form/Configuration/TypoScript/,EXT:turnstile/Configuration/TypoScript/,EXT:turnstile/Tests/Functional/Fixtures/Frontend/TypoScript/'
+              static_file_mode: 3,
+              config: '@import "EXT:turnstile/Tests/Functional/Fixtures/Frontend/ContentRenderer.typoscript"'
+      children:
+        2:
+          self:
+            id: 2
+            title: 'Multistep Test Form'
+            slug: /multistep-test-form
+            doktype: 1
+          entities:
+            content:
+              1:
+                self:
+                  id: 1
+                  CType: form_formframework
+                  pi_flexform: "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>\n<T3FlexForms>\n    <data>\n        <sheet index=\"sDEF\">\n            <language index=\"lDEF\">\n                <field index=\"settings.persistenceIdentifier\">\n                    <value index=\"vDEF\">EXT:turnstile/Tests/Functional/Fixtures/Frontend/MultistepTestForm.form.yaml</value>\n                </field>\n                <field index=\"settings.overrideFinishers\">\n                    <value index=\"vDEF\">0</value>\n                </field>\n            </language>\n        </sheet>\n    </data>\n</T3FlexForms>"
+        3:
+          self:
+            id: 3
+            title: 'Singlestep Test Form'
+            slug: /singlestep-test-form
+            doktype: 1
+          entities:
+            content:
+              2:
+                self:
+                  id: 2
+                  CType: form_formframework
+                  pi_flexform: "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\" ?>\n<T3FlexForms>\n    <data>\n        <sheet index=\"sDEF\">\n            <language index=\"lDEF\">\n                <field index=\"settings.persistenceIdentifier\">\n                    <value index=\"vDEF\">EXT:turnstile/Tests/Functional/Fixtures/Frontend/SinglestepTestForm.form.yaml</value>\n                </field>\n                <field index=\"settings.overrideFinishers\">\n                    <value index=\"vDEF\">0</value>\n                </field>\n            </language>\n        </sheet>\n    </data>\n</T3FlexForms>"

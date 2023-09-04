@@ -1,0 +1,19 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:formvh="http://typo3.org/ns/TYPO3/CMS/Form/ViewHelpers"
+      xmlns:turnstile="http://typo3.org/ns/TRITUM/Turnstile/ViewHelpers"
+      data-namespace-typo3-fluid="true"
+  >
+
+<formvh:renderRenderable renderable="{element}">
+    <span class="turnstile-description">{element.properties.elementDescription}</span>
+    <turnstile:forms.turnstile />
+    <f:render partial="Field/Field" arguments="{element: element, doNotShowLabel: 1}" contentAs="elementContent">
+        <f:form.hidden
+                property="{element.identifier}"
+                id="{element.uniqueIdentifier}"
+                value="1"
+                additionalAttributes="{formvh:translateElementProperty(element: element, property: 'fluidAdditionalAttributes')}"
+        />
+    </f:render>
+</formvh:renderRenderable>
+</html>

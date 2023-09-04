@@ -1,0 +1,103 @@
+TYPO3:
+  CMS:
+    Form:
+      prototypes:
+        standard:
+          formEditor:
+            translationFiles:
+              10: 'EXT:form/Resources/Private/Language/Database.xlf'
+              1692719161: 'EXT:turnstile/Resources/Private/Language/locallang_turnstile.xlf'
+            dynamicRequireJsModules:
+              additionalViewModelModules:
+                1692719161: 'TYPO3/CMS/Turnstile/Backend/FormEditor/TurnstileViewModel'
+            formEditorPartials:
+              FormElement-Turnstile: 'Stage/SimpleTemplate'
+          formElementsDefinition:
+            Form:
+              renderingOptions:
+                partialRootPaths:
+                  1692719161: 'EXT:turnstile/Resources/Private/Partials/Forms/Frontend/FormElements/'
+            Turnstile:
+              implementationClassName: 'TYPO3\CMS\Form\Domain\Model\FormElements\GenericFormElement'
+              properties:
+                containerClassAttribute: 'turnstile'
+                elementClassAttribute: ''
+                elementErrorClassAttribute: error
+              variants:
+                -
+                  identifier: hide-1
+                  renderingOptions:
+                    enabled: false
+                  condition: 'stepType == "SummaryPage" || finisherIdentifier in ["EmailToSender", "EmailToReceiver"]'
+              formEditor:
+                label: 'turnstile.formEditor.element.label'
+                group: custom
+                groupSorting: 700
+                iconIdentifier: 'turnstile'
+                predefinedDefaults:
+                  validators:
+                    -
+                      identifier: 'Turnstile'
+                propertyCollections:
+                  validators:
+                    10:
+                      identifier: 'Turnstile'
+                      editors:
+                        100:
+                          identifier: 'header'
+                          templateName: 'Inspector-CollectionElementHeaderEditor'
+                          label: 'turnstile.formEditor.inspector.validator.header_label'
+                editors:
+                  100:
+                    identifier: 'header'
+                    templateName: 'Inspector-FormElementHeaderEditor'
+                  200:
+                    identifier: 'label'
+                    templateName: 'Inspector-TextEditor'
+                    label: 'formEditor.elements.FormElement.editor.label.label'
+                    propertyPath: 'label'
+                  230:
+                    identifier: 'elementDescription'
+                    templateName: 'Inspector-TextEditor'
+                    label: 'formEditor.elements.FormElement.editor.elementDescription.label'
+                    propertyPath: 'properties.elementDescription'
+                  700:
+                    identifier: 'gridColumnViewPortConfiguration'
+                    templateName: 'Inspector-GridColumnViewPortConfigurationEditor'
+                    label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.label'
+                    configurationOptions:
+                      viewPorts:
+                        10:
+                          viewPortIdentifier: 'xs'
+                          label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.xs.label'
+                        20:
+                          viewPortIdentifier: 'sm'
+                          label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.sm.label'
+                        30:
+                          viewPortIdentifier: 'md'
+                          label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.md.label'
+                        40:
+                          viewPortIdentifier: 'lg'
+                          label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.lg.label'
+                      numbersOfColumnsToUse:
+                        label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.numbersOfColumnsToUse.label'
+                        propertyPath: 'properties.gridColumnClassAutoConfiguration.viewPorts.{@viewPortIdentifier}.numbersOfColumnsToUse'
+                        fieldExplanationText: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.numbersOfColumnsToUse.fieldExplanationText'
+                  900:
+                    identifier: 'validators'
+                    templateName: 'Inspector-ValidatorsEditor'
+                    label: 'formEditor.elements.TextMixin.editor.validators.label'
+                    selectOptions:
+                      10:
+                        value: 'Turnstile'
+                        label: 'turnstile.formEditor.inspector.validator.select.option_label'
+                  9999:
+                    identifier: 'removeButton'
+                    templateName: 'Inspector-RemoveElementEditor'
+
+          validatorsDefinition:
+            Turnstile:
+              implementationClassName: 'TRITUM\Turnstile\Validation\TurnstileValidator'
+              formEditor:
+                iconIdentifier: 'form-validator'
+                label: 'turnstile.formEditor.stage.validation_label'

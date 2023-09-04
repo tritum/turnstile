@@ -1,0 +1,90 @@
+identifier: multistep-test-form
+type: Form
+prototypeName: standard
+label: 'Multistep test form'
+finishers:
+  -
+    identifier: EmailToReceiver
+    options:
+      subject: 'Your message: {subject}'
+      recipients:
+        recipient@waldhacker.dev: 'waldhacker'
+      senderAddress: '{email}'
+      senderName: '{name}'
+      replyToRecipients: {  }
+      carbonCopyRecipients: {  }
+      blindCarbonCopyRecipients: {  }
+      format: html
+      attachUploads: 'true'
+      translation:
+        language: ''
+      useFluidEmail: 'true'
+      title: 'Confirmation of your message'
+  -
+    identifier: Confirmation
+    options:
+      message: 'Confirmation text'
+      contentElementUid: ''
+renderables:
+  -
+    identifier: page-1
+    label: 'Contact Form'
+    type: Page
+    renderables:
+      -
+        identifier: name
+        label: Name
+        type: Text
+        properties:
+          fluidAdditionalAttributes:
+            placeholder: Name
+        defaultValue: ''
+        validators:
+          -
+            identifier: NotEmpty
+      -
+        identifier: subject
+        label: Subject
+        type: Text
+        properties:
+          fluidAdditionalAttributes:
+            placeholder: Subject
+        defaultValue: ''
+        validators:
+          -
+            identifier: NotEmpty
+      -
+        identifier: email
+        label: Email
+        type: Text
+        properties:
+          fluidAdditionalAttributes:
+            placeholder: 'Email address'
+        defaultValue: ''
+        validators:
+          -
+            identifier: NotEmpty
+          -
+            identifier: EmailAddress
+      -
+        identifier: message
+        label: Message
+        type: Textarea
+        properties:
+          fluidAdditionalAttributes:
+            placeholder: ''
+        defaultValue: ''
+        validators:
+          -
+            identifier: NotEmpty
+      -
+        type: Turnstile
+        identifier: turnstile-1
+        label: turnstile
+        validators:
+          -
+            identifier: Turnstile
+  -
+    identifier: summarypage
+    label: 'Summary page'
+    type: SummaryPage

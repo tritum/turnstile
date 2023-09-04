@@ -1,0 +1,22 @@
+plugin.tx_form {
+    settings {
+        yamlConfigurations {
+            100 = EXT:turnstile/Tests/Functional/Fixtures/Frontend/FormSetup.yaml
+        }
+    }
+}
+
+plugin.tx_turnstile {
+  settings {
+    # @see https://github.com/usarise/turnstile-php#test-keys
+    # Always passes (Dummy Testing)
+    siteKey = '1x00000000000000000000AA';
+
+    # Always passes
+    #privateKey = 1x0000000000000000000000000000000AA
+    # Always fails
+    #privateKey = 2x0000000000000000000000000000000AA
+    # Yields a “token already spent” error
+    #privateKey = 3x0000000000000000000000000000000AA
+  }
+}

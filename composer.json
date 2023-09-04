@@ -1,0 +1,113 @@
+{
+    "name": "tritum/turnstile",
+    "type": "typo3-cms-extension",
+    "description": "TYPO3 Extension to add turnstile to EXT:form",
+    "license": ["GPL-2.0-or-later"],
+    "homepage": "https://github.com/tritum/turnstile",
+    "support": {
+        "issues": "https://github.com/tritum/turnstile/issues"
+    },
+    "authors": [
+        {
+            "name": "tritum",
+            "email": "hello@www.tritum.de",
+            "homepage": "https://www.tritum.de",
+            "role": "Developer"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.1 | ^8.2",
+        "ext-json": "*",
+        "ramsey/uuid": "^4.7",
+        "typo3/cms-core": "^11.5@dev || ^12.4@dev",
+        "typo3/cms-extbase": "^11.5@dev || ^12.4@dev",
+        "typo3/cms-fluid": "^11.5@dev || ^12.4@dev",
+        "typo3/cms-form": "^11.5@dev || ^12.4@dev",
+        "usarise/turnstile": "^0.4.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16 | ^3.13",
+        "helmich/typo3-typoscript-lint": "^2.3 | ^3.0",
+        "overtrue/phplint": "^2.0 | ^5.3",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpstan/extension-installer": "^1.0",
+        "phpunit/phpunit": "^9.4",
+        "roave/security-advisories": "dev-latest",
+        "saschaegerer/phpstan-typo3": "^1.8",
+        "typo3/cms-fluid-styled-content": "^11.5@dev || ^12.1@dev",
+        "typo3/coding-standards": "^0.3 | ^0.5",
+        "typo3/testing-framework": "^7.x-dev",
+        "vimeo/psalm": "^3.0 | ^4.0 | ^5.0",
+        "zbateson/mail-mime-parser": "^2.0"
+    },
+    "suggest": {
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "TRITUM\\Turnstile\\": "Classes/",
+            "TRITUM\\Turnstile\\Tests\\": "Tests/"
+        }
+    },
+    "config": {
+        "bin-dir": ".build/bin",
+        "sort-packages": true,
+        "vendor-dir": ".build/vendor",
+        "allow-plugins": {
+            "typo3/class-alias-loader": true,
+            "typo3/cms-composer-installers": true,
+            "phpstan/extension-installer": true
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "mkdir -p .build/web/typo3conf/ext/", "[ -L .build/web/typo3conf/ext/turnstile ] || ln -snvf ../../../../. .build/web/typo3conf/ext/turnstile"
+        ],
+        "ci:lint:php": [
+            "phplint -c build/phplint.yaml"
+        ],
+        "ci:lint:yaml": [
+            "php build/yaml-lint.php Configuration/"
+        ],
+        "ci:lint:typoscript": [
+            "typoscript-lint -c build/tslint.yaml"
+        ],
+        "ci:stan": [
+            "phpstan analyze --configuration build/phpstan.neon"
+        ],
+        "ci:stan:gen-baseline": [
+            "phpstan analyze --configuration build/phpstan.neon --generate-baseline build/phpstan.baseline.neon"
+        ],
+        "ci:psalm": [
+            "psalm --config=build/psalm.xml --php-version=$(php -r 'echo phpversion();')"
+        ],
+        "ci:psalm:gen-baseline": [
+            "psalm --config=build/psalm.xml --php-version=$(php -r 'echo phpversion();') --set-baseline=build/psalm-baseline.xml"
+        ],
+        "ci:cgl:check": [
+            "php-cs-fixer fix --config build/phpcs.dist -v --dry-run"
+        ],
+        "ci:cgl:fix": [
+            "php-cs-fixer fix --config build/phpcs.dist"
+        ],
+        "ci:tests:unit:cover": [
+            "mkdir -p .build/logs",
+            "phpdbg -d memory_limit=1024M -qrr ./.build/bin/phpunit -c build/phpunit.xml --coverage-text --colors=never --coverage-clover .build/logs/clover.xml --coverage-cobertura .build/logs/cobertura.xml --coverage-html .build/logs/html"
+        ],
+        "ci:tests:unit": [
+            "phpunit -c build/phpunit.xml --log-junit .build/logs/junit.xml"
+        ],
+        "ci:tests:functional": [
+            "phpunit -c build/phpunit-functionals.xml --log-junit .build/logs/junit-functionals.xml"
+        ]
+    },
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "turnstile",
+            "cms-package-dir": "{$vendor-dir}/typo3/cms",
+            "web-dir": ".build/web"
+        }
+    }
+}

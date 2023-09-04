@@ -1,0 +1,12 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    TRITUM\Turnstile\:
+        resource: '../Classes/*'
+
+    TRITUM\Turnstile\Service\ConfigurationService:
+        public: true
+
