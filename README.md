@@ -2,8 +2,8 @@
 ![TYPO3 extension](https://typo3-badges.dev/badge/turnstile/extension/shields.svg)
 ![Total downloads](https://typo3-badges.dev/badge/turnstile/downloads/shields.svg)
 ![Stability](https://typo3-badges.dev/badge/turnstile/stability/shields.svg)
-![ci](https://github.com/tritum/turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/tritum/turnstile/actions/workflows/ci.yml)
-![phpstan](https://img.shields.io/badge/PHPStan-lvl%20max-blueviolet)](https://phpstan.org/)
+[![ci](https://github.com/tritum/turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/tritum/turnstile/actions/workflows/ci.yml)
+[![phpstan](https://img.shields.io/badge/PHPStan-lvl%20max-blueviolet)](https://phpstan.org/)
 ![TYPO3 versions](https://typo3-badges.dev/badge/turnstile/typo3/shields.svg)
 ![Latest version](https://typo3-badges.dev/badge/turnstile/version/shields.svg)
 
