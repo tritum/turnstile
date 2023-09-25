@@ -6,14 +6,17 @@
             <trans-unit id="turnstile.formEditor.element.label">
                 <source>Turnstile</source>
             </trans-unit>
-            <trans-unit id="turnstile.formEditor.stage.validation_label">
-                <source>Turnstile validation is active</source>
+            <trans-unit id="turnstile.formEditor.inspector.validator.header_label">
+                <source>Turnstile</source>
             </trans-unit>
             <trans-unit id="turnstile.formEditor.inspector.validator.select.option_label">
                 <source>Turnstile</source>
             </trans-unit>
-            <trans-unit id="turnstile.formEditor.inspector.validator.header_label">
-                <source>Turnstile</source>
+            <trans-unit id="turnstile.formEditor.stage.validation_label">
+                <source>Turnstile validation is active</source>
+            </trans-unit>
+            <trans-unit id="formEditor.elements.FormElement.editor.label.label">
+                <source>Turnstile by TRITUM</source>
             </trans-unit>
         </body>
     </file>
