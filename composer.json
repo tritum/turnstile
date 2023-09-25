@@ -1,7 +1,7 @@
 {
     "name": "tritum/turnstile",
     "type": "typo3-cms-extension",
-    "description": "TYPO3 Extension to add turnstile to EXT:form",
+    "description": "TYPO3 Extension to add Turnstile to EXT:form",
     "license": ["GPL-2.0-or-later"],
     "homepage": "https://github.com/tritum/turnstile",
     "support": {
@@ -9,8 +9,8 @@
     },
     "authors": [
         {
-            "name": "tritum",
-            "email": "hello@www.tritum.de",
+            "name": "TRITUM GmbH",
+            "email": "hallo@tritum.de",
             "homepage": "https://www.tritum.de",
             "role": "Developer"
         }

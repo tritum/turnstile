@@ -4,16 +4,16 @@
         <header/>
         <body>
             <trans-unit id="turnstile.formEditor.element.label">
-                <source>turnstile</source>
+                <source>Turnstile</source>
             </trans-unit>
             <trans-unit id="turnstile.formEditor.stage.validation_label">
-                <source>turnstile validation is active</source>
+                <source>Turnstile validation is active</source>
             </trans-unit>
             <trans-unit id="turnstile.formEditor.inspector.validator.select.option_label">
-                <source>turnstile</source>
+                <source>Turnstile</source>
             </trans-unit>
             <trans-unit id="turnstile.formEditor.inspector.validator.header_label">
-                <source>turnstile</source>
+                <source>Turnstile</source>
             </trans-unit>
         </body>
     </file>

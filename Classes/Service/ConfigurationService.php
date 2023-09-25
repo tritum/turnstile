@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the turnstile extension for TYPO3
+ * This file is part of the Turnstile extension for TYPO3
  * - (c) 2023 TRITUM GmbH
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -50,7 +50,7 @@ class ConfigurationService
 
         if (empty($siteKey)) {
             throw new MissingKeyException(
-                'turnstile site key not defined',
+                'Turnstile site key not defined',
                 1603034266
             );
         }
@@ -70,7 +70,7 @@ class ConfigurationService
 
         if (empty($privateKey)) {
             throw new MissingKeyException(
-                'turnstile private key not defined',
+                'Turnstile private key not defined',
                 1603034285
             );
         }
