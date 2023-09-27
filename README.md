@@ -7,21 +7,21 @@
 ![TYPO3 versions](https://typo3-badges.dev/badge/turnstile/typo3/shields.svg)
 ![Latest version](https://typo3-badges.dev/badge/turnstile/version/shields.svg)
 
-# TYPO3 Extension to add turnstile to EXT:form.
+# TYPO3 Extension to add Turnstile to EXT:form
 
-This TYPO3 extension provides turnstile integration for the TYPO3 Form Framework (EXT:form).
+This TYPO3 extension provides Turnstile integration for the TYPO3 Form Framework (EXT:form).
 
-For more information check the [turnstile website](https://www.cloudflare.com/products/turnstile/).
+For more information check the [Turnstile website](https://www.cloudflare.com/products/turnstile/).
 
 # Quick Setup
 
 1. Install the extension and activate it.
 2. Add the static TypoScript configuration to your TypoScript template.
-3. Add a `turnstile` element to a form.
+3. Add a `Turnstile` element to a form.
 
 ## TypoScript Constants
 
-Set the following TypoScript constants:
+Set the following TypoScript Constants:
 
 ```typo3_typoscript
 plugin.tx_turnstile {
@@ -50,7 +50,7 @@ If you are using CSP, make sure to adjust them accordingly:
 
 # Privacy
 
-Make sure to inform your users of your usage of turnstile and what that means.
+Make sure to inform your users of your usage of Turnstile and what that means.
 
 For more information see: https://www.cloudflare.com/de-de/trust-hub/gdpr/.
 

@@ -1,13 +1,13 @@
 plugin.tx_turnstile {
   settings {
     apiScript = https://challenges.cloudflare.com/turnstile/v0/api.js
-    # Number of allowed seconds after the challenge was solved.
+    # Number of allowed seconds after the challenge was solved
     challengeTimeout = 300
     # Could be light, dark or auto
     # See https://developers.cloudflare.com/turnstile/get-started/client-side-rendering/#configurations -> theme
     theme = light
-    # Set the value to 0 if you do not want to send the user IP to cloudflare.
-    sendIp = 1
+    # Set the value to 1 if you want to send the user IP to Cloudflare
+    sendIp = 0
     # Get API keys at https://dash.cloudflare.com/?to=/:account/turnstile
     siteKey =
     privateKey =

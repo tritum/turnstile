@@ -5,8 +5,7 @@ TYPO3:
         standard:
           formEditor:
             translationFiles:
-              10: 'EXT:form/Resources/Private/Language/Database.xlf'
-              1692719161: 'EXT:turnstile/Resources/Private/Language/locallang_turnstile.xlf'
+              1692719161: 'EXT:turnstile/Resources/Private/Language/Database.xlf'
             dynamicRequireJsModules:
               additionalViewModelModules:
                 1692719161: 'TYPO3/CMS/Turnstile/Backend/FormEditor/TurnstileViewModel'

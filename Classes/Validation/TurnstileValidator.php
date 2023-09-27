@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the turnstile extension for TYPO3
+ * This file is part of the Turnstile extension for TYPO3
  * - (c) 2023 TRITUM GmbH
  *
  * It is free software; you can redistribute it and/or modify it under
@@ -44,7 +44,7 @@ class TurnstileValidator extends AbstractValidator
     private $configurationService;
 
     /**
-     * Validate the turnstile value from the request and add an error if not valid
+     * Validate the Turnstile value from the request and add an error if not valid
      *
      * @param mixed $value The value
      */
@@ -139,7 +139,7 @@ class TurnstileValidator extends AbstractValidator
             $translateKey,
             $extensionName,
             $arguments
-        ) ?? 'Validating turnstile failed.';
+        ) ?? 'Validating Turnstile failed.';
     }
 
     private function getConfigurationService(): ConfigurationService

@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of the turnstile extension for TYPO3
+ * This file is part of the Turnstile extension for TYPO3
  * - (c) 2023 TRITUM GmbH
  *
  * It is free software; you can redistribute it and/or modify it under
