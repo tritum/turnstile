@@ -16,7 +16,7 @@
                 <source>Turnstile validation is active</source>
             </trans-unit>
             <trans-unit id="formEditor.elements.FormElement.editor.label.label">
-                <source>Turnstile by TRITUM</source>
+                <source>Turnstile</source>
             </trans-unit>
         </body>
     </file>

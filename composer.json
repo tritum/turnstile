@@ -21,10 +21,10 @@
         "php": "^8.1 | ^8.2",
         "ext-json": "*",
         "ramsey/uuid": "^4.7",
-        "typo3/cms-core": "^11.5@dev || ^12.4@dev",
-        "typo3/cms-extbase": "^11.5@dev || ^12.4@dev",
-        "typo3/cms-fluid": "^11.5@dev || ^12.4@dev",
-        "typo3/cms-form": "^11.5@dev || ^12.4@dev",
+        "typo3/cms-core": "^11.5.0 || ^12.4.0",
+        "typo3/cms-extbase": "^11.5.0 || ^12.4.0",
+        "typo3/cms-fluid": "^11.5.0 || ^12.4.0",
+        "typo3/cms-form": "^11.5.0 || ^12.4.0",
         "usarise/turnstile": "^0.4.1"
     },
     "require-dev": {

@@ -13,7 +13,7 @@ call_user_func(static function () {
     );
 
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-        'Turnstile',
+        'turnstile',
         'setup',
         'module.tx_form {
           settings {
