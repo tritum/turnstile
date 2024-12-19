@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2020-10-19T13:37:00Z" target-language="it">
+    <header/>
+    <body>
+      <trans-unit id="turnstile.formEditor.element.label">
+        <source>Turnstile</source>
+        <target state="needs-translation">Turnstile</target>
+      </trans-unit>
+      <trans-unit id="turnstile.formEditor.inspector.validator.header_label">
+        <source>Turnstile</source>
+        <target state="needs-translation">Turnstile</target>
+      </trans-unit>
+      <trans-unit id="turnstile.formEditor.inspector.validator.select.option_label">
+        <source>Turnstile</source>
+        <target state="needs-translation">Turnstile</target>
+      </trans-unit>
+      <trans-unit id="turnstile.formEditor.stage.validation_label">
+        <source>Turnstile validation is active</source>
+        <target state="needs-translation">Turnstile validation is active</target>
+      </trans-unit>
+      <trans-unit id="formEditor.elements.FormElement.editor.label.label">
+        <source>Turnstile</source>
+        <target state="needs-translation">Turnstile</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
