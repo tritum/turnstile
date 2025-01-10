@@ -3,21 +3,21 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2020-10-19T13:37:00Z" target-language="da">
     <header/>
     <body>
-      <trans-unit id="turnstile.formEditor.element.label">
+      <trans-unit id="turnstile.formEditor.element.label" approved="yes">
         <source>Turnstile</source>
-        <target state="needs-translation">Turnstile</target>
+        <target state="final">Turnstile</target>
       </trans-unit>
-      <trans-unit id="turnstile.formEditor.inspector.validator.header_label">
+      <trans-unit id="turnstile.formEditor.inspector.validator.header_label" approved="yes">
         <source>Turnstile</source>
-        <target state="needs-translation">Turnstile</target>
+        <target state="final">Turnstile</target>
       </trans-unit>
-      <trans-unit id="turnstile.formEditor.inspector.validator.select.option_label">
+      <trans-unit id="turnstile.formEditor.inspector.validator.select.option_label" approved="yes">
         <source>Turnstile</source>
-        <target state="needs-translation">Turnstile</target>
+        <target state="final">Turnstile</target>
       </trans-unit>
-      <trans-unit id="turnstile.formEditor.stage.validation_label">
+      <trans-unit id="turnstile.formEditor.stage.validation_label" approved="yes">
         <source>Turnstile validation is active</source>
-        <target state="needs-translation">Turnstile validation is active</target>
+        <target state="final">Turnstile validering er aktiv</target>
       </trans-unit>
       <trans-unit id="formEditor.elements.FormElement.editor.label.label">
         <source>Turnstile</source>
