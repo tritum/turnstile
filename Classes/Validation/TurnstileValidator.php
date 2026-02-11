@@ -125,7 +125,7 @@ class TurnstileValidator extends AbstractValidator
     /**
      * @codeCoverageIgnore
      */
-    protected function translateErrorMessage($translateKey, $extensionName, $arguments = []): string
+    protected function translateErrorMessage(string $translateKey, string $extensionName = '', array $arguments = []): string
     {
         $event = new TranslateErrorMessageEvent($translateKey);
         GeneralUtility::makeInstance(EventDispatcher::class)->dispatch($event);

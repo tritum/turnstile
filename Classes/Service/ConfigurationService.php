@@ -23,10 +23,7 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 
 class ConfigurationService
 {
-    /**
-     * @var array|null
-     */
-    private $settings;
+    private ?array $settings = null;
 
     public function __construct(ConfigurationManager $configurationManager)
     {

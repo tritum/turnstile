@@ -5,7 +5,6 @@ $EM_CONF[$_EXTKEY] = [
     'description' => 'TYPO3 Extension to add Turnstile to EXT:form',
     'category' => 'fe',
     'state' => 'stable',
-    'clearCacheOnLoad' => 1,
     'author' => 'TRITUM GmbH',
     'author_email' => 'hallo@tritum.de',
     'author_company' => 'TRITUM GmbH',

@@ -2,7 +2,7 @@
 
 defined('TYPO3') || die();
 
-call_user_func(static function () {
+call_user_func(static function (): void {
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
         'turnstile',
         'Configuration/TypoScript',

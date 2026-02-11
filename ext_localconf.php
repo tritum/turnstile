@@ -2,7 +2,7 @@
 
 defined('TYPO3') or die();
 
-call_user_func(static function () {
+call_user_func(static function (): void {
     $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
     $iconRegistry->registerIcon(
         'turnstile',
