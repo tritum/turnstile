@@ -23,15 +23,12 @@ use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * @codeCoverageIgnore maybe test with an acceptance test at a later point
  */
 class TurnstileViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     protected $escapeOutput = false;
 
     public function __construct(private ConfigurationService $configurationService, private AssetCollector $assetCollector)
