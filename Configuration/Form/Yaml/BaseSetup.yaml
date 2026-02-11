@@ -38,8 +38,8 @@ TYPO3:
                   condition: 'stepType == "SummaryPage" || finisherIdentifier in ["EmailToSender", "EmailToReceiver"]'
               formEditor:
                 label: 'turnstile.formEditor.element.label'
-                group: custom
-                groupSorting: 700
+                group: dataInput
+                groupSorting: 1160
                 iconIdentifier: 'turnstile'
                 predefinedDefaults:
                   validators:
