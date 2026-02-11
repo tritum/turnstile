@@ -6,9 +6,17 @@ TYPO3:
           formEditor:
             translationFiles:
               1692719161: 'EXT:turnstile/Resources/Private/Language/Database.xlf'
+
+            # TYPO3 12 (AMD/RequireJS)
             dynamicRequireJsModules:
               additionalViewModelModules:
                 1692719161: 'TYPO3/CMS/Turnstile/Backend/FormEditor/TurnstileViewModel'
+
+            # TYPO3 13 (ESM)
+            dynamicJavaScriptModules:
+              additionalViewModelModules:
+                1692719161: '@tritum/turnstile/Backend/FormEditor/turnstile-view-model.js'
+
             formEditorPartials:
               FormElement-Turnstile: 'Stage/SimpleTemplate'
           formElementsDefinition:
