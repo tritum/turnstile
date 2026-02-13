@@ -42,6 +42,9 @@ class TurnstileValidator extends AbstractValidator
      * @var ConfigurationService|null
      */
     private $configurationService;
+    public function __construct(private readonly \TYPO3\CMS\Core\EventDispatcher\EventDispatcher $eventDispatcher)
+    {
+    }
 
     /**
      * Validate the Turnstile value from the request and add an error if not valid
@@ -128,7 +131,7 @@ class TurnstileValidator extends AbstractValidator
     protected function translateErrorMessage(string $translateKey, string $extensionName = '', array $arguments = []): string
     {
         $event = new TranslateErrorMessageEvent($translateKey);
-        GeneralUtility::makeInstance(EventDispatcher::class)->dispatch($event);
+        $this->eventDispatcher->dispatch($event);
 
         $message = $event->getMessage();
         if (!empty($message)) {

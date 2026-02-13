@@ -31,7 +31,7 @@ class TurnstileViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
 
-    public function __construct(private ConfigurationService $configurationService, private AssetCollector $assetCollector)
+    public function __construct(private readonly ConfigurationService $configurationService, private readonly AssetCollector $assetCollector)
     {
     }
 
