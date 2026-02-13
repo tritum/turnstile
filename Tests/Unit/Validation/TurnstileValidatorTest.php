@@ -19,30 +19,31 @@ declare(strict_types=1);
 namespace TRITUM\Turnstile\Tests\Unit\Validation;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Http\Message\ServerRequestInterface;
 use TRITUM\Turnstile\Validation\TurnstileValidator;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use PHPUnit\Framework\Attributes\BackupGlobals;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @backupGlobals enabled
- * @coversDefaultClass \TRITUM\Turnstile\Validation\TurnstileValidator
- */
+#[BackupGlobals(true)]
+#[CoversClass(TurnstileValidator::class)]
 class TurnstileValidatorTest extends TestCase
 {
-    use ProphecyTrait;
+    private ServerRequestInterface $typo3request;
 
-    /**
-     * @var ServerRequestInterface|ObjectProphecy
-     */
-    private $typo3request;
+    private EventDispatcher $eventDispatcher;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->typo3request = $this->prophesize(ServerRequestInterface::class);
-        $GLOBALS['TYPO3_REQUEST'] = $this->typo3request->reveal();
+
+        $this->eventDispatcher = $this->createMock(EventDispatcher::class);
+        $this->typo3request = $this->createMock(ServerRequestInterface::class);
+        $this->typo3request->method('getParsedBody')->willReturn([]);
+        $GLOBALS['TYPO3_REQUEST'] = $this->typo3request;
     }
 
     protected function tearDown(): void
@@ -51,17 +52,14 @@ class TurnstileValidatorTest extends TestCase
         parent::tearDown();
     }
 
-    /**
-     * @test
-     * @covers ::validate
-     * @covers ::isValid
-     * @covers ::validateTurnstile
-     */
+    #[Test]
     public function validateReturnsErrorIfPostResponseFieldIsEmpty(): void
     {
         $subject = $this->getMockBuilder(TurnstileValidator::class)
+            ->setConstructorArgs([$this->eventDispatcher])
             ->onlyMethods(['translateErrorMessage'])
             ->getMock();
+
 
         $result = $subject->validate(1);
         $errors = $result->getErrors();
@@ -70,7 +68,7 @@ class TurnstileValidatorTest extends TestCase
         self::assertSame(1566206403, $errors[0]->getCode());
     }
 
-    public function validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider(): \Generator
+    public static function validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider(): \Generator
     {
         yield 'Unsuccessful response with error codes' => [
             'responseData' => [
@@ -89,20 +87,14 @@ class TurnstileValidatorTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider
-     * @covers ::validate
-     * @covers ::isValid
-     * @covers ::validateTurnstile
-     * @covers ::getConfigurationService
-     * @covers ::getRequestFactory
-     */
+    #[Test]
+    #[DataProvider('validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider')]
     public function validateReturnsErrorIfVerificationRequestReturnsError(
         array $responseData,
         int $expectedErrorCode
     ): void {
         $subject = $this->getMockBuilder(TurnstileValidator::class)
+            ->setConstructorArgs([$this->eventDispatcher])
             ->onlyMethods(['translateErrorMessage', 'validateTurnstile'])
             ->getMock();
 
