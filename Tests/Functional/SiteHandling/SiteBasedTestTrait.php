@@ -241,7 +241,7 @@ trait SiteBasedTestTrait
         $baseConfiguration['errorHandler'] = $handler;
 
         return array_map(
-            static function (int $code) use ($baseConfiguration) {
+            static function (int $code) use ($baseConfiguration): array {
                 $baseConfiguration['errorCode'] = $code;
                 return $baseConfiguration;
             },
@@ -297,7 +297,7 @@ trait SiteBasedTestTrait
      */
     protected function mergeInstruction(AbstractInstruction $current, AbstractInstruction $other): AbstractInstruction
     {
-        if (get_class($current) !== get_class($other)) {
+        if ($current::class !== $other::class) {
             throw new \LogicException('Cannot merge different instruction types', 1565863174);
         }
 

@@ -20,11 +20,8 @@ namespace TRITUM\Turnstile\Tests\Functional\Form;
 
 class DataExtractor
 {
-    private $html;
-
-    public function __construct(string $html)
+    public function __construct(private readonly string $html)
     {
-        $this->html = $html;
     }
 
     public function getFormData(string $query = '//form'): array

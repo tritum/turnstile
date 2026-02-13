@@ -108,7 +108,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         $this->internalRequestContext = (new InternalRequestContext())
             ->withGlobalSettings(['TYPO3_CONF_VARS' => static::TYPO3_CONF_VARS]);
 
-        $this->withDatabaseSnapshot(function () {
+        $this->withDatabaseSnapshot(function (): void {
             $this->setUpDatabase();
         });
     }
@@ -148,7 +148,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
     protected function getMailSpoolMessages(): array
     {
         $messages = [];
-        foreach (array_filter(glob($this->instancePath . '/' . self::MAIL_SPOOL_FOLDER . '*'), 'is_file') as $path) {
+        foreach (array_filter(glob($this->instancePath . '/' . self::MAIL_SPOOL_FOLDER . '*'), is_file(...)) as $path) {
             $serializedMessage = file_get_contents($path);
             $message = unserialize($serializedMessage);
             if (!($message instanceof SentMessage)) {
