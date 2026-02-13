@@ -6,17 +6,10 @@ TYPO3:
           formEditor:
             translationFiles:
               1692719161: 'EXT:turnstile/Resources/Private/Language/Database.xlf'
-
-            # TYPO3 12 (AMD/RequireJS)
-            dynamicRequireJsModules:
-              additionalViewModelModules:
-                1692719161: 'TYPO3/CMS/Turnstile/Backend/FormEditor/TurnstileViewModel'
-
             # TYPO3 13 (ESM)
             dynamicJavaScriptModules:
               additionalViewModelModules:
-                1692719161: '@tritum/turnstile/Backend/FormEditor/turnstile-view-model.js'
-
+                1692719161: '@tritum/turnstile/Backend/FormEditor/TurnstileViewModel.js'
             formEditorPartials:
               FormElement-Turnstile: 'Stage/SimpleTemplate'
           formElementsDefinition:
@@ -38,7 +31,7 @@ TYPO3:
                   condition: 'stepType == "SummaryPage" || finisherIdentifier in ["EmailToSender", "EmailToReceiver"]'
               formEditor:
                 label: 'turnstile.formEditor.element.label'
-                group: dataInput
+                group: custom
                 groupSorting: 1160
                 iconIdentifier: 'turnstile'
                 predefinedDefaults:
