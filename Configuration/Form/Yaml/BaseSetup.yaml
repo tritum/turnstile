@@ -6,7 +6,6 @@ TYPO3:
           formEditor:
             translationFiles:
               1692719161: 'EXT:turnstile/Resources/Private/Language/Database.xlf'
-            # TYPO3 13 (ESM)
             dynamicJavaScriptModules:
               additionalViewModelModules:
                 1692719161: '@tritum/turnstile/Backend/FormEditor/TurnstileViewModel.js'
