@@ -18,15 +18,15 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Unit\Validation;
 
-use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ServerRequestInterface;
-use TRITUM\Turnstile\Validation\TurnstileValidator;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use PHPUnit\Framework\Attributes\BackupGlobals;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ServerRequestInterface;
+use TRITUM\Turnstile\Validation\TurnstileValidator;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 #[BackupGlobals(true)]
 #[CoversClass(TurnstileValidator::class)]
@@ -59,7 +59,6 @@ class TurnstileValidatorTest extends TestCase
             ->setConstructorArgs([$this->eventDispatcher])
             ->onlyMethods(['translateErrorMessage'])
             ->getMock();
-
 
         $result = $subject->validate(1);
         $errors = $result->getErrors();

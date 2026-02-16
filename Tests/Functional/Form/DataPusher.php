@@ -105,7 +105,7 @@ class DataPusher
 
             if ($this->strEndsWith($elementData['name'], '[__state]')) {
                 $prefix = key(ArrayUtility::flatten($nameStruct));
-                $prefixItems = explode('.', (string) $prefix);
+                $prefixItems = explode('.', (string)$prefix);
                 array_pop($prefixItems);
                 $dataPrefix = implode('.', $prefixItems) . '.';
             }

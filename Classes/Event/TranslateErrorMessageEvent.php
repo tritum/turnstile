@@ -28,9 +28,7 @@ final class TranslateErrorMessageEvent
      */
     private string $message = '';
 
-    public function __construct(private readonly string $errorCode)
-    {
-    }
+    public function __construct(private readonly string $errorCode) {}
 
     public function getErrorCode(): string
     {

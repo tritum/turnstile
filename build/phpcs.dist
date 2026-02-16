@@ -2,4 +2,14 @@
 
 $config = \TYPO3\CodingStandards\CsFixerConfig::create();
 $config->getFinder()->in(__DIR__ . '/../');
+
+$rules = $config->getRules();
+
+// Deprecation: @PER-CS1.0 -> @PER-CS1x0
+if (isset($rules['@PER-CS1.0'])) {
+    unset($rules['@PER-CS1.0']);
+    $rules['@PER-CS1x0'] = true;
+    $config->setRules($rules);
+}
+
 return $config;

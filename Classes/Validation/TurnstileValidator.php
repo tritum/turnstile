@@ -26,7 +26,6 @@ use TRITUM\Turnstile\Event\TranslateErrorMessageEvent;
 use TRITUM\Turnstile\Service\ConfigurationService;
 use Turnstile\Client\Client;
 use Turnstile\Turnstile;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
@@ -42,9 +41,7 @@ class TurnstileValidator extends AbstractValidator
      * @var ConfigurationService|null
      */
     private $configurationService;
-    public function __construct(private readonly \TYPO3\CMS\Core\EventDispatcher\EventDispatcher $eventDispatcher)
-    {
-    }
+    public function __construct(private readonly \TYPO3\CMS\Core\EventDispatcher\EventDispatcher $eventDispatcher) {}
 
     /**
      * Validate the Turnstile value from the request and add an error if not valid
@@ -87,9 +84,14 @@ class TurnstileValidator extends AbstractValidator
         $request = $GLOBALS['TYPO3_REQUEST'];
 
         $parsedBody = $request->getParsedBody();
+        if (!is_array($parsedBody)) {
+            $parsedBody = [];
+        }
 
+        /** @var mixed $token */
         $token = $parsedBody['cf-turnstile-response'] ?? null;
-        if ($token === null) {
+
+        if (!is_string($token) || $token === '') {
             return ['success' => false, 'error-codes' => ['invalid-post-form']];
         }
 
