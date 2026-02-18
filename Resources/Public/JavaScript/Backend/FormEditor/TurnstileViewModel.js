@@ -27,7 +27,7 @@ function setupHelper() {
     assert(
         typeof Helper.bootstrap === 'function',
         'The view model helper does not implement the method "bootstrap"',
-        1491643380
+        1491643380,
     );
     Helper.bootstrap(getApp());
 }
@@ -54,7 +54,7 @@ function handleRenderTemplate(topic, args) {
 function subscribeEvents() {
     getPublisherSubscriber().subscribe(
         'view/stage/abstract/render/template/perform',
-        handleRenderTemplate
+        handleRenderTemplate,
     );
 }
 
