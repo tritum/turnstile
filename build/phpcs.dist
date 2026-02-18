@@ -5,11 +5,20 @@ $config->getFinder()->in(__DIR__ . '/../');
 
 $rules = $config->getRules();
 
-// Deprecation: @PER-CS1.0 -> @PER-CS1x0
-if (isset($rules['@PER-CS1.0'])) {
-    unset($rules['@PER-CS1.0']);
-    $rules['@PER-CS1x0'] = true;
-    $config->setRules($rules);
-}
+// Entferne ggf. vorhandene (teilweise deprecated) PER-RuleSets
+unset(
+    $rules['@PER-CS'],
+    $rules['@PER-CS1.0'],
+    $rules['@PER-CS1x0'],
+    $rules['@PER-CS2.0'],
+    $rules['@PER-CS2x0'],
+    $rules['@PER-CS3.0'],
+    $rules['@PER-CS3x0']
+);
+
+// Setze den gewünschten PER-Standard (empfohlen für TYPO3 12 + 13 Extensions)
+$rules['@PER-CS2x0'] = true;
+
+$config->setRules($rules);
 
 return $config;

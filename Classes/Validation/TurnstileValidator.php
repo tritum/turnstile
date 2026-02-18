@@ -29,6 +29,7 @@ use Turnstile\Turnstile;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
 class TurnstileValidator extends AbstractValidator
 {
@@ -41,7 +42,9 @@ class TurnstileValidator extends AbstractValidator
      * @var ConfigurationService|null
      */
     private $configurationService;
-    public function __construct(private readonly \TYPO3\CMS\Core\EventDispatcher\EventDispatcher $eventDispatcher) {}
+    public function __construct(
+        private readonly EventDispatcher $eventDispatcher
+    ) {}
 
     /**
      * Validate the Turnstile value from the request and add an error if not valid
@@ -81,12 +84,9 @@ class TurnstileValidator extends AbstractValidator
     protected function validateTurnstile(): array
     {
         /** @var ServerRequestInterface $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
-
-        $parsedBody = $request->getParsedBody();
-        if (!is_array($parsedBody)) {
-            $parsedBody = [];
-        }
+        $request = (method_exists($this, 'getRequest') && $this->getRequest() instanceof ServerRequestInterface)
+            ? $this->getRequest()
+            : $GLOBALS['TYPO3_REQUEST'];
 
         /** @var mixed $token */
         $token = $parsedBody['cf-turnstile-response'] ?? null;
