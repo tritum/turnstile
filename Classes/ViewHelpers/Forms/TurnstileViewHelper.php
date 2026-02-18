@@ -56,7 +56,7 @@ class TurnstileViewHelper extends AbstractViewHelper
         $this->assetCollector->addJavaScript(
             'turnstile',
             $this->configurationService->getApiScript(),
-            ['async' => '', 'defer' => '']
+            ['async' => '', 'defer' => ''],
         );
 
         return '<div class="cf-turnstile" data-sitekey="' . $this->configurationService->getSiteKey() . '" data-theme="' . $this->configurationService->getTheme() . '"></div>';

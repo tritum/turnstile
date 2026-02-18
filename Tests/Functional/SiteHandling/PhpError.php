@@ -43,10 +43,10 @@ class PhpError implements PageErrorHandlerInterface
     public function handlePageError(
         ServerRequestInterface $request,
         string $message,
-        array $reasons = []
+        array $reasons = [],
     ): ResponseInterface {
         $data = [
-            'uri' => (string)$request->getUri(),
+            'uri' => (string) $request->getUri(),
             'message' => $message,
             'reasons' => $reasons,
         ];

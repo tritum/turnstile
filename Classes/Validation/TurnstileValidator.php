@@ -43,7 +43,7 @@ class TurnstileValidator extends AbstractValidator
      */
     private $configurationService;
     public function __construct(
-        private readonly EventDispatcher $eventDispatcher
+        private readonly EventDispatcher $eventDispatcher,
     ) {}
 
     /**
@@ -55,23 +55,23 @@ class TurnstileValidator extends AbstractValidator
     {
         $response = $this->validateTurnstile();
 
-        if ((bool)($response['success'] ?? false) === false) {
+        if ((bool) ($response['success'] ?? false) === false) {
             if (empty($response['error-codes'])) {
                 $this->addError(
                     $this->translateErrorMessage(
                         'error_turnstile_generic',
-                        'turnstile'
+                        'turnstile',
                     ),
-                    1637268562
+                    1637268562,
                 );
             } else {
                 foreach ($response['error-codes'] as $errorCode) {
                     $this->addError(
                         $this->translateErrorMessage(
                             'error_turnstile_' . $errorCode,
-                            'turnstile'
+                            'turnstile',
                         ),
-                        1566206403
+                        1566206403,
                     );
                 }
             }
@@ -112,13 +112,13 @@ class TurnstileValidator extends AbstractValidator
                 GeneralUtility::makeInstance(HttpFactory::class),
             ),
             $this->getConfigurationService()->getPrivateKey(),
-            (string)Uuid::uuid4()
+            (string) Uuid::uuid4(),
         );
 
         $response = $turnstile->verify(
             $token,
             $ip,
-            $this->getConfigurationService()->getChallengeTimeout()
+            $this->getConfigurationService()->getChallengeTimeout(),
         );
 
         return [
@@ -143,7 +143,7 @@ class TurnstileValidator extends AbstractValidator
         return LocalizationUtility::translate(
             $translateKey,
             $extensionName,
-            $arguments
+            $arguments,
         ) ?? 'Validating Turnstile failed.';
     }
 

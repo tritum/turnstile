@@ -30,7 +30,7 @@ class ConfigurationService
         if ($this->settings === null) {
             $this->settings = $configurationManager->getConfiguration(
                 ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
-                'turnstile'
+                'turnstile',
             );
         }
     }
@@ -48,7 +48,7 @@ class ConfigurationService
         if (empty($siteKey)) {
             throw new MissingKeyException(
                 'Turnstile site key not defined',
-                1603034266
+                1603034266,
             );
         }
 
@@ -68,7 +68,7 @@ class ConfigurationService
         if (empty($privateKey)) {
             throw new MissingKeyException(
                 'Turnstile private key not defined',
-                1603034285
+                1603034285,
             );
         }
 
@@ -87,7 +87,7 @@ class ConfigurationService
         if (empty($apiScript)) {
             throw new MissingKeyException(
                 'turnstile api script not defined',
-                1603034329
+                1603034329,
             );
         }
 
@@ -100,7 +100,7 @@ class ConfigurationService
             ? $this->settings['sendIp']
             : \getenv('TURNSTILE_SEND_IP');
 
-        return (bool)$sendIp;
+        return (bool) $sendIp;
     }
 
     public function getChallengeTimeout(): int
@@ -109,7 +109,7 @@ class ConfigurationService
             ? $this->settings['challengeTimeout']
             : \getenv('TURNSTILE_CHALLENGE_TIMEOUT');
 
-        return (int)(empty($challengeTimeout) ? 300 : $challengeTimeout);
+        return (int) (empty($challengeTimeout) ? 300 : $challengeTimeout);
     }
 
     public function getTheme(): string

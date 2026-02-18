@@ -90,7 +90,7 @@ class TurnstileValidatorTest extends TestCase
     #[DataProvider('validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider')]
     public function validateReturnsErrorIfVerificationRequestReturnsError(
         array $responseData,
-        int $expectedErrorCode
+        int $expectedErrorCode,
     ): void {
         $subject = $this->getMockBuilder(TurnstileValidator::class)
             ->setConstructorArgs([$this->eventDispatcher])

@@ -102,7 +102,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
             ],
             [
                 $this->buildErrorHandlingConfiguration('Fluid', [404]),
-            ]
+            ],
         );
 
         $this->internalRequestContext = (new InternalRequestContext())
@@ -141,7 +141,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         $writer->invokeFactory($factory);
 
         static::failIfArrayIsNotEmpty(
-            $writer->getErrors()
+            $writer->getErrors(),
         );
     }
 

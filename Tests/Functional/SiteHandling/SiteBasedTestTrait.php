@@ -47,7 +47,7 @@ trait SiteBasedTestTrait
 
         static::fail(
             'Array was not empty as expected, but contained these items:' . LF
-            . '* ' . implode(LF . '* ', $items)
+            . '* ' . implode(LF . '* ', $items),
         );
     }
 
@@ -61,7 +61,7 @@ trait SiteBasedTestTrait
         string $identifier,
         array $site = [],
         array $languages = [],
-        array $errorHandling = []
+        array $errorHandling = [],
     ): void {
         $configuration = $site;
         if (!empty($languages)) {
@@ -74,13 +74,13 @@ trait SiteBasedTestTrait
         if ($this->isV11Branch()) {
             $siteConfiguration = new SiteConfiguration(
                 $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core')
+                $this->getContainer()->get('cache.core'),
             );
         } else {
             $siteConfiguration = new SiteConfiguration(
                 $this->instancePath . '/typo3conf/sites/',
                 GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core')
+                $this->getContainer()->get('cache.core'),
             );
         }
 
@@ -99,18 +99,18 @@ trait SiteBasedTestTrait
      */
     protected function mergeSiteConfiguration(
         string $identifier,
-        array $overrides
+        array $overrides,
     ): void {
         if ($this->isV11Branch()) {
             $siteConfiguration = new SiteConfiguration(
                 $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core')
+                $this->getContainer()->get('cache.core'),
             );
         } else {
             $siteConfiguration = new SiteConfiguration(
                 $this->instancePath . '/typo3conf/sites/',
                 GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core')
+                $this->getContainer()->get('cache.core'),
             );
         }
 
@@ -130,7 +130,7 @@ trait SiteBasedTestTrait
      */
     protected function buildSiteConfiguration(
         int $rootPageId,
-        string $base = ''
+        string $base = '',
     ): array {
         return [
             'rootPageId' => $rootPageId,
@@ -145,7 +145,7 @@ trait SiteBasedTestTrait
      */
     protected function buildDefaultLanguageConfiguration(
         string $identifier,
-        string $base
+        string $base,
     ): array {
         $configuration = $this->buildLanguageConfiguration($identifier, $base);
         $configuration['typo3Language'] = 'default';
@@ -165,7 +165,7 @@ trait SiteBasedTestTrait
         string $identifier,
         string $base,
         array $fallbackIdentifiers = [],
-        string $fallbackType = null
+        string $fallbackType = null,
     ): array {
         $preset = $this->resolveLanguagePreset($identifier);
 
@@ -189,7 +189,7 @@ trait SiteBasedTestTrait
                     $preset = $this->resolveLanguagePreset($fallbackIdentifier);
                     return $preset['id'];
                 },
-                $fallbackIdentifiers
+                $fallbackIdentifiers,
             );
             $configuration['fallbackType'] = $fallbackType ?? 'fallback';
             $configuration['fallbacks'] = implode(',', $fallbackIds);
@@ -205,7 +205,7 @@ trait SiteBasedTestTrait
      */
     protected function buildErrorHandlingConfiguration(
         string $handler,
-        array $codes
+        array $codes,
     ): array {
         if ($handler === 'Page') {
             // This implies you cannot test both 404 and 403 in the same test.
@@ -234,7 +234,7 @@ trait SiteBasedTestTrait
         } else {
             throw new \LogicException(
                 sprintf('Invalid handler "%s"', $handler),
-                1533894782
+                1533894782,
             );
         }
 
@@ -245,7 +245,7 @@ trait SiteBasedTestTrait
                 $baseConfiguration['errorCode'] = $code;
                 return $baseConfiguration;
             },
-            $codes
+            $codes,
         );
     }
 
@@ -258,7 +258,7 @@ trait SiteBasedTestTrait
         if (!isset(static::LANGUAGE_PRESETS[$identifier])) {
             throw new \LogicException(
                 sprintf('Undefined preset identifier "%s"', $identifier),
-                1533893665
+                1533893665,
             );
         }
         return static::LANGUAGE_PRESETS[$identifier];
@@ -280,7 +280,7 @@ trait SiteBasedTestTrait
             if (isset($modifiedInstructions[$identifier]) || $request->getInstruction($identifier) !== null) {
                 $modifiedInstructions[$identifier] = $this->mergeInstruction(
                     $modifiedInstructions[$identifier] ?? $request->getInstruction($identifier),
-                    $instruction
+                    $instruction,
                 );
             } else {
                 $modifiedInstructions[$identifier] = $instruction;
@@ -305,11 +305,11 @@ trait SiteBasedTestTrait
             /** @var $other TypoScriptInstruction */
             $typoScript = array_replace_recursive(
                 $current->getTypoScript() ?? [],
-                $other->getTypoScript() ?? []
+                $other->getTypoScript() ?? [],
             );
             $constants = array_replace_recursive(
                 $current->getConstants() ?? [],
-                $other->getConstants() ?? []
+                $other->getConstants() ?? [],
             );
             if ($typoScript !== []) {
                 $current = $current->withTypoScript($typoScript);
@@ -331,6 +331,6 @@ trait SiteBasedTestTrait
 
     private function isV11Branch(): bool
     {
-        return (int)VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getCurrentTypo3Version())['version_main'] === 11;
+        return (int) VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getCurrentTypo3Version())['version_main'] === 11;
     }
 }

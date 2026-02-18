@@ -69,13 +69,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $formDataNoPrefix,
         array $removeFormData,
         array $removeFormDataNoPrefix,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -94,12 +94,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][email]']['class']);
@@ -156,13 +156,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $removeFormData,
         array $removeFormDataNoPrefix,
         string $expectedErrorMessage,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -181,12 +181,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][email]']['class']);
@@ -205,7 +205,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         $formPostRequest = $dataPusher
@@ -218,12 +218,12 @@ class TurnstileValidationTest extends FunctionalTestCase
             ->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(2, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(2, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringContainsString('Summary page', $pageMarkup);
         self::assertStringNotContainsString('Confirmation text', $pageMarkup);
         self::assertCount(0, $this->getMailSpoolMessages());
@@ -274,13 +274,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $formDataNoPrefix,
         array $removeFormData,
         array $removeFormDataNoPrefix,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -299,12 +299,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][email]']['class']);
@@ -361,13 +361,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $removeFormData,
         array $removeFormDataNoPrefix,
         string $expectedErrorMessage,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -386,12 +386,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][email]']['class']);
@@ -410,7 +410,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         $formPostRequest = $dataPusher
@@ -423,7 +423,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
