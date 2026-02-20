@@ -94,11 +94,11 @@ class TurnstileValidator extends AbstractValidator
         /** @var mixed $tokenRaw */
         $tokenRaw = $parsedBody['cf-turnstile-response'] ?? null;
 
-        if ($tokenRaw === null) {
+        if (!is_scalar($tokenRaw) || empty($tokenRaw)) {
             return ['success' => false, 'error-codes' => ['invalid-post-form']];
         }
 
-        $token = is_string($tokenRaw) ? trim($tokenRaw) : (is_scalar($tokenRaw) ? (string) $tokenRaw : '');
+        $token = trim((string) $tokenRaw);
 
         if ($token === '' && $tokenRaw !== '') {
             // tokenRaw was non-string/non-scalar (e.g. array/object) -> invalid post data

@@ -3,14 +3,16 @@ on: [ push, pull_request ]
 jobs:
   ci:
     name: Tests with TYPO3 ${{ matrix.typo3 }} PHP ${{ matrix.php }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         typo3: [ '^12.4', '^13.4' ]
-        php: [ '8.1', '8.2' ]
+        php: [ '8.1', '8.2', '8.3', '8.4', '8.5' ]
         exclude:
           - typo3: '^12.4'
-            php: '8.0'
+            php: '8.5'
+          - typo3: '^13.4'
+            php: '8.1'
 
     steps:
       - name: Checkout repository
@@ -51,11 +53,11 @@ jobs:
 
       - name: Psalm
         run: composer run ci:psalm
-        if: matrix.typo3 == '^12.4'
+        if: matrix.typo3 == '^13.4'
 
       - name: PHPStan
         run: composer run ci:stan
-        if: matrix.typo3 == '^12.4'
+        if: matrix.typo3 == '^13.4'
 
       #- name: Unit tests
       #  run: composer run ci:tests:unit:cover
