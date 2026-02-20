@@ -18,8 +18,6 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Unit\Validation;
 
-use PHPUnit\Framework\Attributes\BackupGlobals;
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -28,8 +26,9 @@ use TRITUM\Turnstile\Validation\TurnstileValidator;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-#[BackupGlobals(true)]
-#[CoversClass(TurnstileValidator::class)]
+/**
+ * @coversDefaultClass \TRITUM\Turnstile\Validation\TurnstileValidator
+ */
 class TurnstileValidatorTest extends TestCase
 {
     private ServerRequestInterface $typo3request;
@@ -52,7 +51,10 @@ class TurnstileValidatorTest extends TestCase
         parent::tearDown();
     }
 
-    #[Test]
+    /**
+     * @test
+     * @covers ::isValid
+     */
     public function validateReturnsErrorIfPostResponseFieldIsEmpty(): void
     {
         $subject = $this->getMockBuilder(TurnstileValidator::class)
@@ -86,8 +88,11 @@ class TurnstileValidatorTest extends TestCase
         ];
     }
 
-    #[Test]
-    #[DataProvider('validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider')]
+    /**
+     * @test
+     * @dataProvider validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider
+     * @covers ::isValid
+     */
     public function validateReturnsErrorIfVerificationRequestReturnsError(
         array $responseData,
         int $expectedErrorCode,

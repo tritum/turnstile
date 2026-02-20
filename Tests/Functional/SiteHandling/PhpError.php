@@ -32,8 +32,9 @@ class PhpError implements PageErrorHandlerInterface
      * @param int $statusCode
      * @param array $configuration
      */
-    public function __construct(private readonly int   $statusCode,
-                                private readonly array $configuration
+    public function __construct(
+        private readonly int $statusCode,
+        private readonly array $configuration,
     ) {}
 
     /**

@@ -88,10 +88,20 @@ class TurnstileValidator extends AbstractValidator
             ? $this->getRequest()
             : $GLOBALS['TYPO3_REQUEST'];
 
-        /** @var mixed $token */
-        $token = $parsedBody['cf-turnstile-response'] ?? null;
+        $parsedBody = $request->getParsedBody();
+        $parsedBody = is_array($parsedBody) ? $parsedBody : [];
 
-        if (!is_string($token) || $token === '') {
+        /** @var mixed $tokenRaw */
+        $tokenRaw = $parsedBody['cf-turnstile-response'] ?? null;
+
+        if ($tokenRaw === null) {
+            return ['success' => false, 'error-codes' => ['invalid-post-form']];
+        }
+
+        $token = is_string($tokenRaw) ? trim($tokenRaw) : (is_scalar($tokenRaw) ? (string) $tokenRaw : '');
+
+        if ($token === '' && $tokenRaw !== '') {
+            // tokenRaw was non-string/non-scalar (e.g. array/object) -> invalid post data
             return ['success' => false, 'error-codes' => ['invalid-post-form']];
         }
 
