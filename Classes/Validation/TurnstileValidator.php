@@ -99,9 +99,7 @@ class TurnstileValidator extends AbstractValidator
         }
 
         $token = trim((string) $tokenRaw);
-
-        if ($token === '' && $tokenRaw !== '') {
-            // tokenRaw was non-string/non-scalar (e.g. array/object) -> invalid post data
+        if ($token === '') {
             return ['success' => false, 'error-codes' => ['invalid-post-form']];
         }
 
