@@ -49,7 +49,7 @@ jobs:
                 "typo3/cms-extbase:${{ matrix.typo3 }}" \
                 "typo3/cms-fluid:${{ matrix.typo3 }}" \
                 "typo3/cms-form:${{ matrix.typo3 }}" \
-                "typo3/testing-framework:^9.0"
+                "typo3/testing-framework:^8.0"
             fi
 
       - name: Install dependencies
