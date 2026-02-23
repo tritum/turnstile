@@ -3,7 +3,7 @@ on: [ push, pull_request ]
 jobs:
   ci:
     name: Tests with TYPO3 ${{ matrix.typo3 }} PHP ${{ matrix.php }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         typo3: [ '^11.5', '^12.4' ]
