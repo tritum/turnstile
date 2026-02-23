@@ -158,8 +158,8 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
                 $plaintext = (string) ($original->getTextBody() ?? '');
                 $subject = (string) ($original->getSubject() ?? '');
                 $to = implode(', ', array_map(
-                    static fn (Address $a): string => $a->toString(),
-                    $original->getTo()
+                    static fn(Address $a): string => $a->toString(),
+                    $original->getTo(),
                 ));
                 $date = $original->getDate();
             } else {

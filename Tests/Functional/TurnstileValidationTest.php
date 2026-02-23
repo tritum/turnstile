@@ -196,7 +196,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             self::assertTrue(
                 str_contains($pageMarkup, 'Missing validation value in POST request.')
                 || str_contains($pageMarkup, 'The response parameter was not passed'),
-                'Expected one of the error messages was not found in markup.'
+                'Expected one of the error messages was not found in markup.',
             );
         } else {
             self::assertStringContainsString($expectedErrorMessage, $pageMarkup);

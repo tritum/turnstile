@@ -30,7 +30,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
-use Override;
 
 /**
  * @psalm-suppress UnusedClass
@@ -55,7 +54,7 @@ class TurnstileValidator extends AbstractValidator
      *
      * @param mixed $value The value
      */
-    #[Override]
+    #[\Override]
     protected function isValid($value): void
     {
         $response = $this->validateTurnstile();
@@ -143,7 +142,7 @@ class TurnstileValidator extends AbstractValidator
     /**
      * @codeCoverageIgnore
      */
-    #[Override]
+    #[\Override]
     protected function translateErrorMessage(string $translateKey, string $extensionName = '', array $arguments = []): string
     {
         $event = new TranslateErrorMessageEvent($translateKey);

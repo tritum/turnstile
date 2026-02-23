@@ -23,7 +23,6 @@ use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
-use Override;
 
 /**
  * @codeCoverageIgnore maybe test with an acceptance test at a later point
@@ -41,7 +40,7 @@ class TurnstileViewHelper extends AbstractTagBasedViewHelper
     /**
      * @return string
      */
-    #[Override]
+    #[\Override]
     public function render(): string
     {
         /** @var FormRuntime|null $formRuntime */
