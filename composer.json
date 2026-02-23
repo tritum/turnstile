@@ -60,6 +60,12 @@
             "typo3/class-alias-loader": false,
             "typo3/cms-composer-installers": true,
             "phpstan/extension-installer": true
+        },
+        "audit": {
+            "ignore": [
+                "PKSA-y2cr-5h3j-g3ys"
+            ],
+            "block-insecure": false
         }
     },
     "scripts": {
