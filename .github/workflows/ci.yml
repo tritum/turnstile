@@ -44,9 +44,10 @@ jobs:
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
-      - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
+      - name: Install dependencies with TYPO3
         run: |
-          composer require typo3/cms-core:${{ matrix.typo3 }} --prefer-dist --no-progress --no-suggest --optimize-autoloader
+          composer require typo3/cms-core:${{ matrix.typo3 }} --no-update --no-interaction
+          composer update --with-all-dependencies --no-interaction --prefer-dist --no-progress
 
       - name: Info
         run: composer info

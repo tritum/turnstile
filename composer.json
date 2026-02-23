@@ -35,7 +35,6 @@
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.0",
         "phpunit/phpunit": "^10.0",
-        "roave/security-advisories": "dev-latest",
         "saschaegerer/phpstan-typo3": "^1.8",
         "symfony/polyfill-php83": "^1.28",
         "typo3/cms-fluid-styled-content": "^12.4.x-dev || ^13.4.x-dev",
