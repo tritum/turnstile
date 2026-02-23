@@ -24,7 +24,8 @@ use TYPO3\CMS\Core\Core\Bootstrap;
 use TYPO3\TestingFramework\Core\Functional\Framework\DataHandling\Scenario\DataHandlerFactory;
 use TYPO3\TestingFramework\Core\Functional\Framework\DataHandling\Scenario\DataHandlerWriter;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequestContext;
-use ZBateson\MailMimeParser\Message;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
 
 abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functional\FunctionalTestCase
 {
@@ -63,7 +64,6 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         'backend',
         'frontend',
         'extbase',
-        'install',
         'recordlist',
         'fluid',
         'fluid_styled_content',
@@ -75,18 +75,6 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
     protected int $rootPageUid = 1;
 
     protected string $databaseScenarioFile = __DIR__ . '/Fixtures/Frontend/StandardPagesScenario.yaml';
-
-    public static function setUpBeforeClass(): void
-    {
-        parent::setUpBeforeClass();
-        static::initializeDatabaseSnapshot();
-    }
-
-    public static function tearDownAfterClass(): void
-    {
-        static::destroyDatabaseSnapshot();
-        parent::tearDownAfterClass();
-    }
 
     protected function setUp(): void
     {
@@ -100,13 +88,10 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
             [
                 $this->buildDefaultLanguageConfiguration('DE', '/'),
             ],
-            [
-                $this->buildErrorHandlingConfiguration('Fluid', [404]),
-            ],
+            $this->buildErrorHandlingConfiguration('Fluid', [404]),
         );
 
-        $this->internalRequestContext = (new InternalRequestContext())
-            ->withGlobalSettings(['TYPO3_CONF_VARS' => static::TYPO3_CONF_VARS]);
+        $this->internalRequestContext = new InternalRequestContext();
 
         $this->withDatabaseSnapshot(function (): void {
             $this->setUpDatabase();
@@ -148,20 +133,46 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
     protected function getMailSpoolMessages(): array
     {
         $messages = [];
-        foreach (array_filter(glob($this->instancePath . '/' . self::MAIL_SPOOL_FOLDER . '*'), is_file(...)) as $path) {
-            $serializedMessage = file_get_contents($path);
-            $message = unserialize($serializedMessage);
-            if (!($message instanceof SentMessage)) {
+
+        $files = glob($this->instancePath . '/' . self::MAIL_SPOOL_FOLDER . '*') ?: [];
+        foreach (array_filter($files, 'is_file') as $path) {
+            $serialized = file_get_contents($path);
+            if ($serialized === false) {
                 continue;
             }
 
-            $message = Message::from($message->toString(), false);
+            /** @var mixed $sent */
+            $sent = @unserialize($serialized, ['allowed_classes' => true]);
+            if (!($sent instanceof SentMessage)) {
+                continue;
+            }
+
+            $original = $sent->getOriginalMessage();
+
+            $plaintext = '';
+            $subject = '';
+            $to = '';
+            $date = null;
+
+            if ($original instanceof Email) {
+                $plaintext = (string) ($original->getTextBody() ?? '');
+                $subject = (string) ($original->getSubject() ?? '');
+                $to = implode(', ', array_map(
+                    static fn (Address $a): string => $a->toString(),
+                    $original->getTo()
+                ));
+                $date = $original->getDate();
+            } else {
+                // Fallback: zumindest als String verfügbar
+                $raw = method_exists($original, 'toString') ? (string) $original->toString() : '';
+                $plaintext = $raw;
+            }
+
             $messages[] = [
-                'plaintext' => $message->getTextContent(),
-                //'html' => $message->getHtmlContent(),
-                'subject' => $message->getHeaderValue('Subject'),
-                'date' => new \DateTime($message->getHeaderValue('Date')),
-                'to' => $message->getHeaderValue('To'),
+                'plaintext' => $plaintext,
+                'subject' => $subject,
+                'date' => $date instanceof \DateTimeInterface ? \DateTime::createFromInterface($date) : null,
+                'to' => $to,
             ];
         }
 

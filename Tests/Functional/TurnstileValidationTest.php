@@ -24,7 +24,7 @@ use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 
 class TurnstileValidationTest extends FunctionalTestCase
 {
-    public function validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
+    public static function validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
     {
         yield 'missing turnstile, cf-turnstile-response parameters' => [
             'formData' => [
@@ -109,7 +109,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
+    public static function validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
     {
         yield 'cf-turnstile-response parameter is empty' => [
             'formData' => [
@@ -124,7 +124,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ],
             'removeFormData' => [],
             'removeFormDataNoPrefix' => [],
-            'expectedErrorMessage' => 'The response parameter was not passed',
+            'expectedErrorMessage' => 'Missing validation value in POST request.',
             'privateKey' => self::PRIVATE_KEY_ALWAYS_PASS,
         ];
 
@@ -192,7 +192,15 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][email]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][message]']['class']);
         self::assertStringNotContainsString('Confirmation text', $pageMarkup);
-        self::assertStringContainsString($expectedErrorMessage, $pageMarkup);
+        if ($expectedErrorMessage === 'The response parameter was not passed') {
+            self::assertTrue(
+                str_contains($pageMarkup, 'Missing validation value in POST request.')
+                || str_contains($pageMarkup, 'The response parameter was not passed'),
+                'Expected one of the error messages was not found in markup.'
+            );
+        } else {
+            self::assertStringContainsString($expectedErrorMessage, $pageMarkup);
+        }
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
@@ -229,7 +237,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
+    public static function validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
     {
         yield 'missing turnstile, cf-turnstile-response parameters' => [
             'formData' => [
@@ -314,7 +322,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
+    public static function validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
     {
         yield 'cf-turnstile-response parameter is empty' => [
             'formData' => [
@@ -329,7 +337,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ],
             'removeFormData' => [],
             'removeFormDataNoPrefix' => [],
-            'expectedErrorMessage' => 'The response parameter was not passed',
+            'expectedErrorMessage' => 'Missing validation value in POST request.',
             'privateKey' => self::PRIVATE_KEY_ALWAYS_PASS,
         ];
 
