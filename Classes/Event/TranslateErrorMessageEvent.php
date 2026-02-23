@@ -32,6 +32,9 @@ final class TranslateErrorMessageEvent
         private readonly string $errorCode,
     ) {}
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function getErrorCode(): string
     {
         return $this->errorCode;
@@ -42,6 +45,9 @@ final class TranslateErrorMessageEvent
         return $this->message;
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function setMessage(string $message): void
     {
         $this->message = $message;

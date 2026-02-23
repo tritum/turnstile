@@ -25,6 +25,9 @@ class ConfigurationService
 {
     private ?array $settings = null;
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function __construct(ConfigurationManager $configurationManager)
     {
         if ($this->settings === null) {

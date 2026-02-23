@@ -36,10 +36,11 @@
         "phpunit/phpunit": "^10.0",
         "roave/security-advisories": "dev-latest",
         "saschaegerer/phpstan-typo3": "^1.8",
+        "symfony/polyfill-php83": "^1.28",
         "typo3/cms-fluid-styled-content": "^11.5@dev || ^12.1@dev",
         "typo3/coding-standards": "^0.8",
         "typo3/testing-framework": "^8.x-dev",
-        "vimeo/psalm": "^3.0 | ^4.0 | ^5.0",
+        "vimeo/psalm": "^5.0 || ^6.0",
         "zbateson/mail-mime-parser": "^2.0"
     },
     "suggest": {
