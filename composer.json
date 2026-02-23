@@ -25,6 +25,7 @@
         "typo3/cms-extbase": "^12.4.0 || ^13.4.0",
         "typo3/cms-fluid": "^12.4.0 || ^13.4.0",
         "typo3/cms-form": "^12.4.0 || ^13.4.0",
+        "typo3/cms-fluid-styled-content": "^12.4.0 || ^13.4.0",
         "usarise/turnstile": "^0.4.1"
     },
     "require-dev": {
@@ -60,6 +61,11 @@
             "typo3/class-alias-loader": false,
             "typo3/cms-composer-installers": true,
             "phpstan/extension-installer": true
+        },
+        "audit": {
+            "ignore": [
+                "PKSA-y2cr-5h3j-g3ys"
+            ]
         }
     },
     "scripts": {
