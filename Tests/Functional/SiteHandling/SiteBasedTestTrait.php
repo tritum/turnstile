@@ -18,10 +18,8 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Functional\SiteHandling;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\AbstractInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\TypoScriptInstruction;
@@ -64,31 +62,25 @@ trait SiteBasedTestTrait
         array $errorHandling = [],
     ): void {
         $configuration = $site;
-        if (!empty($languages)) {
+
+        if ($languages !== []) {
             $configuration['languages'] = $languages;
         }
-        if (!empty($errorHandling)) {
+        if ($errorHandling !== []) {
             $configuration['errorHandling'] = $errorHandling;
         }
 
-        if ($this->isV11Branch()) {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core'),
-            );
-        } else {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core'),
-            );
-        }
+        $siteDir = $this->instancePath . '/typo3conf/sites/' . $identifier;
+        $configFile = $siteDir . '/config.yaml';
 
         try {
             // ensure no previous site configuration influences the test
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
-            $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+            GeneralUtility::rmdir($siteDir, true);
+            GeneralUtility::mkdir_deep($siteDir);
+
+            $yaml = Yaml::dump($configuration, 99, 2);
+            file_put_contents($configFile, $yaml);
+        } catch (\Throwable $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -97,28 +89,27 @@ trait SiteBasedTestTrait
      * @param string $identifier
      * @param array $overrides
      */
-    protected function mergeSiteConfiguration(
-        string $identifier,
-        array $overrides,
-    ): void {
-        if ($this->isV11Branch()) {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core'),
-            );
-        } else {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core'),
-            );
-        }
+    protected function mergeSiteConfiguration(string $identifier, array $overrides): void
+    {
+        $siteDir = $this->instancePath . '/typo3conf/sites/' . $identifier;
+        $configFile = $siteDir . '/config.yaml';
 
-        $configuration = $siteConfiguration->load($identifier);
-        $configuration = array_merge($configuration, $overrides);
         try {
-            $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+            if (!is_file($configFile)) {
+                // nothing to merge -> just write overrides as config
+                GeneralUtility::mkdir_deep($siteDir);
+                file_put_contents($configFile, Yaml::dump($overrides, 99, 2));
+                return;
+            }
+
+            $current = Yaml::parseFile($configFile);
+            $current = is_array($current) ? $current : [];
+
+            // merge (override keys win)
+            $merged = array_replace_recursive($current, $overrides);
+
+            file_put_contents($configFile, Yaml::dump($merged, 99, 2));
+        } catch (\Throwable $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -222,7 +213,7 @@ trait SiteBasedTestTrait
             }
         } elseif ($handler === 'Fluid') {
             $baseConfiguration = [
-                'errorFluidTemplate' => 'typo3/sysext/core/Tests/Functional/Fixtures/Frontend/FluidError.html',
+                'errorFluidTemplate' => 'EXT:turnstile/Tests/Functional/Fixtures/Frontend/FluidError.html',
                 'errorFluidTemplatesRootPath' => '',
                 'errorFluidLayoutsRootPath' => '',
                 'errorFluidPartialsRootPath' => '',
@@ -327,10 +318,5 @@ trait SiteBasedTestTrait
         }
 
         return $current;
-    }
-
-    private function isV11Branch(): bool
-    {
-        return (int) VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getCurrentTypo3Version())['version_main'] === 11;
     }
 }

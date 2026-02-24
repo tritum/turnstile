@@ -60,12 +60,9 @@ jobs:
 
       - name: Psalm
         run: composer run ci:psalm
-        if: matrix.typo3 == '^13.4'
 
       - name: PHPStan
         run: composer run ci:stan
-        if: matrix.typo3 == '^13.4'
 
       - name: Functional tests
         run: composer run ci:tests:functional
-        if: matrix.typo3 == '^12.4'

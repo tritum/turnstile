@@ -21,6 +21,9 @@ namespace TRITUM\Turnstile\Tests\Functional;
 use Symfony\Component\Mailer\SentMessage;
 use TRITUM\Turnstile\Tests\Functional\SiteHandling\SiteBasedTestTrait;
 use TYPO3\CMS\Core\Core\Bootstrap;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Localization\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageServiceFactory;
 use TYPO3\TestingFramework\Core\Functional\Framework\DataHandling\Scenario\DataHandlerFactory;
 use TYPO3\TestingFramework\Core\Functional\Framework\DataHandling\Scenario\DataHandlerWriter;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequestContext;
@@ -79,6 +82,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
     protected function setUp(): void
     {
         parent::setUp();
+        $this->ensureLanguageService();
 
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'] = self::ENCRYPTION_KEY;
 
@@ -119,7 +123,7 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         $this->importCSVDataSet(__DIR__ . '/Fixtures/Frontend/be_users.csv');
         $backendUser = $this->setUpBackendUser(1);
 
-        Bootstrap::initializeLanguageObject();
+        $this->initializeLanguage();
 
         $factory = DataHandlerFactory::fromYamlFile($this->databaseScenarioFile);
         $writer = DataHandlerWriter::withBackendUser($backendUser);
@@ -128,6 +132,42 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
         static::failIfArrayIsNotEmpty(
             $writer->getErrors(),
         );
+    }
+
+    private function ensureLanguageService(): void
+    {
+        if (isset($GLOBALS['LANG']) && $GLOBALS['LANG'] instanceof LanguageService) {
+            return;
+        }
+
+        // for TYPO3 13+: LanguageService needs dependencies -> use factory
+        if (class_exists(LanguageServiceFactory::class)) {
+            $GLOBALS['LANG'] = $this->getContainer()
+                ->get(LanguageServiceFactory::class)
+                ->createFromUserPreferences(null);
+
+            // important: caught makeInstance(LanguageService::class) calls
+            GeneralUtility::addInstance(LanguageService::class, $GLOBALS['LANG']);
+            return;
+        }
+
+        // for TYPO3 12
+        $GLOBALS['LANG'] = GeneralUtility::makeInstance(LanguageService::class);
+        if (method_exists($GLOBALS['LANG'], 'init')) {
+            $GLOBALS['LANG']->init('default');
+        }
+    }
+
+    protected function initializeLanguage(): void
+    {
+        // TYPO3 <= 12
+        if (method_exists(Bootstrap::class, 'initializeLanguageObject')) {
+            Bootstrap::initializeLanguageObject();
+            return;
+        }
+
+        // TYPO3 13+: LanguageService via container (the constructor needs arguments)
+        $this->ensureLanguageService();
     }
 
     protected function getMailSpoolMessages(): array
@@ -163,7 +203,6 @@ abstract class FunctionalTestCase extends \TYPO3\TestingFramework\Core\Functiona
                 ));
                 $date = $original->getDate();
             } else {
-                // Fallback: zumindest als String verfügbar
                 $raw = method_exists($original, 'toString') ? (string) $original->toString() : '';
                 $plaintext = $raw;
             }

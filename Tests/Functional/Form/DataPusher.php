@@ -19,6 +19,7 @@ declare(strict_types=1);
 namespace TRITUM\Turnstile\Tests\Functional\Form;
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 
 class DataPusher
@@ -116,7 +117,11 @@ class DataPusher
         }
 
         foreach ($this->without as $identifier) {
-            $postStructure = ArrayUtility::removeByPath($postStructure, $dataPrefix . $identifier, '.');
+            try {
+                $postStructure = ArrayUtility::removeByPath($postStructure, $dataPrefix . $identifier, '.');
+            } catch (MissingArrayPathException) {
+                // ok: field not present -> nothing to remove
+            }
         }
 
         $postStructure = array_replace_recursive(
