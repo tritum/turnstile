@@ -34,27 +34,17 @@ jobs:
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
-      - name: Pin TYPO3 + testing-framework versions
-        run: |
-            if [ "${{ matrix.typo3 }}" = "^12.4" ]; then
-              composer require --no-update --no-interaction \
-                "typo3/cms-core:${{ matrix.typo3 }}" \
-                "typo3/cms-extbase:${{ matrix.typo3 }}" \
-                "typo3/cms-fluid:${{ matrix.typo3 }}" \
-                "typo3/cms-form:${{ matrix.typo3 }}" \
-                "typo3/testing-framework:^8.0"
-            else
-              composer require --no-update --no-interaction \
-                "typo3/cms-core:${{ matrix.typo3 }}" \
-                "typo3/cms-extbase:${{ matrix.typo3 }}" \
-                "typo3/cms-fluid:${{ matrix.typo3 }}" \
-                "typo3/cms-form:${{ matrix.typo3 }}" \
-                "typo3/testing-framework:^8.0"
-            fi
+      - name: Workaround disable roave/security-advisories for TYPO3 13
+        if: matrix.typo3 == '^13.4'
+        run: composer remove roave/security-advisories --dev --no-interaction --no-update || true
 
-      - name: Install dependencies
+      - name: Force symfony/yaml for TYPO3 13
+        if: matrix.typo3 == '^13.4'
+        run: composer require "symfony/yaml:^7.3" --no-update --no-interaction
+
+      - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
         run: |
-            composer update -W --no-interaction --prefer-dist --no-progress
+            composer require typo3/cms-core:${{ matrix.typo3 }} -W --prefer-dist --no-progress --optimize-autoloader
 
       - name: Info
         run: composer info
