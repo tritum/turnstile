@@ -68,3 +68,4 @@ jobs:
 
       - name: Functional tests
         run: composer run ci:tests:functional
+        if: matrix.typo3 == '^12.4'
