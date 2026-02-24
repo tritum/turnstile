@@ -26,18 +26,15 @@ final class TranslateErrorMessageEvent
     /**
      * @var string
      */
-    private $errorCode = '';
+    private string $message = '';
+
+    public function __construct(
+        private readonly string $errorCode,
+    ) {}
 
     /**
-     * @var string
+     * @psalm-suppress PossiblyUnusedMethod
      */
-    private $message = '';
-
-    public function __construct(string $errorCode)
-    {
-        $this->errorCode = $errorCode;
-    }
-
     public function getErrorCode(): string
     {
         return $this->errorCode;
@@ -48,6 +45,9 @@ final class TranslateErrorMessageEvent
         return $this->message;
     }
 
+    /**
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function setMessage(string $message): void
     {
         $this->message = $message;

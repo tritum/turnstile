@@ -19,16 +19,17 @@ declare(strict_types=1);
 namespace TRITUM\Turnstile\Tests\Functional\Form;
 
 use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\Exception\MissingArrayPathException;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 
 class DataPusher
 {
-    private $formData = [];
-    private $with = [];
-    private $withNoPrefix = [];
-    private $without = [];
-    private $withoutNoPrefix = [];
-    private $withChash = true;
+    private array $formData;
+    private array $with = [];
+    private array $withNoPrefix = [];
+    private array $without = [];
+    private array $withoutNoPrefix = [];
+    private bool $withChash = true;
 
     public function __construct(DataExtractor $dataExtractor, string $query = '//form')
     {
@@ -105,7 +106,7 @@ class DataPusher
 
             if ($this->strEndsWith($elementData['name'], '[__state]')) {
                 $prefix = key(ArrayUtility::flatten($nameStruct));
-                $prefixItems = explode('.', $prefix);
+                $prefixItems = explode('.', (string) $prefix);
                 array_pop($prefixItems);
                 $dataPrefix = implode('.', $prefixItems) . '.';
             }
@@ -116,12 +117,16 @@ class DataPusher
         }
 
         foreach ($this->without as $identifier) {
-            $postStructure = ArrayUtility::removeByPath($postStructure, $dataPrefix . $identifier, '.');
+            try {
+                $postStructure = ArrayUtility::removeByPath($postStructure, $dataPrefix . $identifier, '.');
+            } catch (MissingArrayPathException) {
+                // ok: field not present -> nothing to remove
+            }
         }
 
         $postStructure = array_replace_recursive(
             $postStructure,
-            $this->withNoPrefix
+            $this->withNoPrefix,
         );
 
         foreach ($this->withoutNoPrefix as $identifier) {

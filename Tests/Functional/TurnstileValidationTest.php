@@ -24,7 +24,7 @@ use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 
 class TurnstileValidationTest extends FunctionalTestCase
 {
-    public function validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
+    public static function validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
     {
         yield 'missing turnstile, cf-turnstile-response parameters' => [
             'formData' => [
@@ -69,13 +69,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $formDataNoPrefix,
         array $removeFormData,
         array $removeFormDataNoPrefix,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -94,12 +94,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][email]']['class']);
@@ -109,7 +109,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
+    public static function validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
     {
         yield 'cf-turnstile-response parameter is empty' => [
             'formData' => [
@@ -124,7 +124,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ],
             'removeFormData' => [],
             'removeFormDataNoPrefix' => [],
-            'expectedErrorMessage' => 'The response parameter was not passed',
+            'expectedErrorMessage' => 'Missing validation value in POST request.',
             'privateKey' => self::PRIVATE_KEY_ALWAYS_PASS,
         ];
 
@@ -156,13 +156,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $removeFormData,
         array $removeFormDataNoPrefix,
         string $expectedErrorMessage,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -181,18 +181,26 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][email]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[multistep-test-form-1][message]']['class']);
         self::assertStringNotContainsString('Confirmation text', $pageMarkup);
-        self::assertStringContainsString($expectedErrorMessage, $pageMarkup);
+        if ($expectedErrorMessage === 'The response parameter was not passed') {
+            self::assertTrue(
+                str_contains($pageMarkup, 'Missing validation value in POST request.')
+                || str_contains($pageMarkup, 'The response parameter was not passed'),
+                'Expected one of the error messages was not found in markup.',
+            );
+        } else {
+            self::assertStringContainsString($expectedErrorMessage, $pageMarkup);
+        }
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
@@ -205,7 +213,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         $uri = self::ROOT_PAGE_BASE_URI . '/multistep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         $formPostRequest = $dataPusher
@@ -218,18 +226,18 @@ class TurnstileValidationTest extends FunctionalTestCase
             ->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(2, (int)$elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
+        self::assertEquals(2, (int) $elementData['tx_form_formframework[multistep-test-form-1][__currentPage]']['value']);
         self::assertStringContainsString('Summary page', $pageMarkup);
         self::assertStringNotContainsString('Confirmation text', $pageMarkup);
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
+    public static function validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider(): \Generator
     {
         yield 'missing turnstile, cf-turnstile-response parameters' => [
             'formData' => [
@@ -274,13 +282,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $formDataNoPrefix,
         array $removeFormData,
         array $removeFormDataNoPrefix,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -299,12 +307,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][email]']['class']);
@@ -314,7 +322,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    public function validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
+    public static function validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider(): \Generator
     {
         yield 'cf-turnstile-response parameter is empty' => [
             'formData' => [
@@ -329,7 +337,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ],
             'removeFormData' => [],
             'removeFormDataNoPrefix' => [],
-            'expectedErrorMessage' => 'The response parameter was not passed',
+            'expectedErrorMessage' => 'Missing validation value in POST request.',
             'privateKey' => self::PRIVATE_KEY_ALWAYS_PASS,
         ];
 
@@ -361,13 +369,13 @@ class TurnstileValidationTest extends FunctionalTestCase
         array $removeFormData,
         array $removeFormDataNoPrefix,
         string $expectedErrorMessage,
-        string $privateKey
+        string $privateKey,
     ): void {
         putenv('TURNSTILE_PRIVATE_KEY=' . $privateKey);
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         foreach ($formData as $identifier => $value) {
@@ -386,12 +394,12 @@ class TurnstileValidationTest extends FunctionalTestCase
         $formPostRequest = $dataPusher->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];
 
-        self::assertEquals(1, (int)$elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
+        self::assertEquals(1, (int) $elementData['tx_form_formframework[singlestep-test-form-2][__currentPage]']['value']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][name]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][subject]']['class']);
         self::assertStringNotContainsString('error', $elementData['tx_form_formframework[singlestep-test-form-2][email]']['class']);
@@ -410,7 +418,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         $uri = self::ROOT_PAGE_BASE_URI . '/singlestep-test-form';
 
         $response = $this->executeFrontendSubRequest(new InternalRequest($uri), $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $dataPusher = new DataPusher(new DataExtractor($pageMarkup));
         $formPostRequest = $dataPusher
@@ -423,7 +431,7 @@ class TurnstileValidationTest extends FunctionalTestCase
             ->toPostRequest(new InternalRequest($uri));
 
         $response = $this->executeFrontendSubRequest($formPostRequest, $this->internalRequestContext, true);
-        $pageMarkup = (string)$response->getBody();
+        $pageMarkup = (string) $response->getBody();
 
         $formData = (new DataExtractor($pageMarkup))->getFormData();
         $elementData = $formData['elementData'];

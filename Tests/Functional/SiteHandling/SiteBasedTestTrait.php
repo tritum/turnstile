@@ -18,10 +18,8 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Functional\SiteHandling;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Core\Configuration\SiteConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use Symfony\Component\Yaml\Yaml;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\AbstractInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\ArrayValueInstruction;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\Internal\TypoScriptInstruction;
@@ -47,7 +45,7 @@ trait SiteBasedTestTrait
 
         static::fail(
             'Array was not empty as expected, but contained these items:' . LF
-            . '* ' . implode(LF . '* ', $items)
+            . '* ' . implode(LF . '* ', $items),
         );
     }
 
@@ -61,34 +59,28 @@ trait SiteBasedTestTrait
         string $identifier,
         array $site = [],
         array $languages = [],
-        array $errorHandling = []
+        array $errorHandling = [],
     ): void {
         $configuration = $site;
-        if (!empty($languages)) {
+
+        if ($languages !== []) {
             $configuration['languages'] = $languages;
         }
-        if (!empty($errorHandling)) {
+        if ($errorHandling !== []) {
             $configuration['errorHandling'] = $errorHandling;
         }
 
-        if ($this->isV11Branch()) {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core')
-            );
-        } else {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core')
-            );
-        }
+        $siteDir = $this->instancePath . '/typo3conf/sites/' . $identifier;
+        $configFile = $siteDir . '/config.yaml';
 
         try {
             // ensure no previous site configuration influences the test
-            GeneralUtility::rmdir($this->instancePath . '/typo3conf/sites/' . $identifier, true);
-            $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+            GeneralUtility::rmdir($siteDir, true);
+            GeneralUtility::mkdir_deep($siteDir);
+
+            $yaml = Yaml::dump($configuration, 99, 2);
+            file_put_contents($configFile, $yaml);
+        } catch (\Throwable $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -97,28 +89,27 @@ trait SiteBasedTestTrait
      * @param string $identifier
      * @param array $overrides
      */
-    protected function mergeSiteConfiguration(
-        string $identifier,
-        array $overrides
-    ): void {
-        if ($this->isV11Branch()) {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                $this->getContainer()->get('cache.core')
-            );
-        } else {
-            $siteConfiguration = new SiteConfiguration(
-                $this->instancePath . '/typo3conf/sites/',
-                GeneralUtility::makeInstance(EventDispatcherInterface::class),
-                $this->getContainer()->get('cache.core')
-            );
-        }
+    protected function mergeSiteConfiguration(string $identifier, array $overrides): void
+    {
+        $siteDir = $this->instancePath . '/typo3conf/sites/' . $identifier;
+        $configFile = $siteDir . '/config.yaml';
 
-        $configuration = $siteConfiguration->load($identifier);
-        $configuration = array_merge($configuration, $overrides);
         try {
-            $siteConfiguration->write($identifier, $configuration);
-        } catch (\Exception $exception) {
+            if (!is_file($configFile)) {
+                // nothing to merge -> just write overrides as config
+                GeneralUtility::mkdir_deep($siteDir);
+                file_put_contents($configFile, Yaml::dump($overrides, 99, 2));
+                return;
+            }
+
+            $current = Yaml::parseFile($configFile);
+            $current = is_array($current) ? $current : [];
+
+            // merge (override keys win)
+            $merged = array_replace_recursive($current, $overrides);
+
+            file_put_contents($configFile, Yaml::dump($merged, 99, 2));
+        } catch (\Throwable $exception) {
             $this->markTestSkipped($exception->getMessage());
         }
     }
@@ -130,7 +121,7 @@ trait SiteBasedTestTrait
      */
     protected function buildSiteConfiguration(
         int $rootPageId,
-        string $base = ''
+        string $base = '',
     ): array {
         return [
             'rootPageId' => $rootPageId,
@@ -145,7 +136,7 @@ trait SiteBasedTestTrait
      */
     protected function buildDefaultLanguageConfiguration(
         string $identifier,
-        string $base
+        string $base,
     ): array {
         $configuration = $this->buildLanguageConfiguration($identifier, $base);
         $configuration['typo3Language'] = 'default';
@@ -165,7 +156,7 @@ trait SiteBasedTestTrait
         string $identifier,
         string $base,
         array $fallbackIdentifiers = [],
-        string $fallbackType = null
+        string $fallbackType = null,
     ): array {
         $preset = $this->resolveLanguagePreset($identifier);
 
@@ -189,7 +180,7 @@ trait SiteBasedTestTrait
                     $preset = $this->resolveLanguagePreset($fallbackIdentifier);
                     return $preset['id'];
                 },
-                $fallbackIdentifiers
+                $fallbackIdentifiers,
             );
             $configuration['fallbackType'] = $fallbackType ?? 'fallback';
             $configuration['fallbacks'] = implode(',', $fallbackIds);
@@ -205,7 +196,7 @@ trait SiteBasedTestTrait
      */
     protected function buildErrorHandlingConfiguration(
         string $handler,
-        array $codes
+        array $codes,
     ): array {
         if ($handler === 'Page') {
             // This implies you cannot test both 404 and 403 in the same test.
@@ -222,7 +213,7 @@ trait SiteBasedTestTrait
             }
         } elseif ($handler === 'Fluid') {
             $baseConfiguration = [
-                'errorFluidTemplate' => 'typo3/sysext/core/Tests/Functional/Fixtures/Frontend/FluidError.html',
+                'errorFluidTemplate' => 'EXT:turnstile/Tests/Functional/Fixtures/Frontend/FluidError.html',
                 'errorFluidTemplatesRootPath' => '',
                 'errorFluidLayoutsRootPath' => '',
                 'errorFluidPartialsRootPath' => '',
@@ -234,18 +225,18 @@ trait SiteBasedTestTrait
         } else {
             throw new \LogicException(
                 sprintf('Invalid handler "%s"', $handler),
-                1533894782
+                1533894782,
             );
         }
 
         $baseConfiguration['errorHandler'] = $handler;
 
         return array_map(
-            static function (int $code) use ($baseConfiguration) {
+            static function (int $code) use ($baseConfiguration): array {
                 $baseConfiguration['errorCode'] = $code;
                 return $baseConfiguration;
             },
-            $codes
+            $codes,
         );
     }
 
@@ -258,7 +249,7 @@ trait SiteBasedTestTrait
         if (!isset(static::LANGUAGE_PRESETS[$identifier])) {
             throw new \LogicException(
                 sprintf('Undefined preset identifier "%s"', $identifier),
-                1533893665
+                1533893665,
             );
         }
         return static::LANGUAGE_PRESETS[$identifier];
@@ -280,7 +271,7 @@ trait SiteBasedTestTrait
             if (isset($modifiedInstructions[$identifier]) || $request->getInstruction($identifier) !== null) {
                 $modifiedInstructions[$identifier] = $this->mergeInstruction(
                     $modifiedInstructions[$identifier] ?? $request->getInstruction($identifier),
-                    $instruction
+                    $instruction,
                 );
             } else {
                 $modifiedInstructions[$identifier] = $instruction;
@@ -297,7 +288,7 @@ trait SiteBasedTestTrait
      */
     protected function mergeInstruction(AbstractInstruction $current, AbstractInstruction $other): AbstractInstruction
     {
-        if (get_class($current) !== get_class($other)) {
+        if ($current::class !== $other::class) {
             throw new \LogicException('Cannot merge different instruction types', 1565863174);
         }
 
@@ -305,11 +296,11 @@ trait SiteBasedTestTrait
             /** @var $other TypoScriptInstruction */
             $typoScript = array_replace_recursive(
                 $current->getTypoScript() ?? [],
-                $other->getTypoScript() ?? []
+                $other->getTypoScript() ?? [],
             );
             $constants = array_replace_recursive(
                 $current->getConstants() ?? [],
-                $other->getConstants() ?? []
+                $other->getConstants() ?? [],
             );
             if ($typoScript !== []) {
                 $current = $current->withTypoScript($typoScript);
@@ -327,10 +318,5 @@ trait SiteBasedTestTrait
         }
 
         return $current;
-    }
-
-    private function isV11Branch(): bool
-    {
-        return (int)VersionNumberUtility::convertVersionStringToArray(VersionNumberUtility::getCurrentTypo3Version())['version_main'] === 11;
     }
 }

@@ -20,12 +20,9 @@ namespace TRITUM\Turnstile\Tests\Functional\Form;
 
 class DataExtractor
 {
-    private $html;
-
-    public function __construct(string $html)
-    {
-        $this->html = $html;
-    }
+    public function __construct(
+        private readonly string $html,
+    ) {}
 
     public function getFormData(string $query = '//form'): array
     {
@@ -64,7 +61,16 @@ class DataExtractor
     private function extractFormFragment(string $html, string $query): \DOMDocument
     {
         $document = new \DOMDocument();
-        $document->loadHTML($html);
+
+        $previous = libxml_use_internal_errors(true);
+        try {
+            $html = '<?xml encoding="utf-8" ?>' . $html;
+
+            $document->loadHTML($html);
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previous);
+        }
 
         $xpath = new \DomXPath($document);
         $fragment = new \DOMDocument();

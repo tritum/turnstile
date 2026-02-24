@@ -26,11 +26,14 @@ use TRITUM\Turnstile\Event\TranslateErrorMessageEvent;
 use TRITUM\Turnstile\Service\ConfigurationService;
 use Turnstile\Client\Client;
 use Turnstile\Turnstile;
-use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
+use TYPO3\CMS\Core\EventDispatcher\EventDispatcher;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class TurnstileValidator extends AbstractValidator
 {
     /**
@@ -42,33 +45,37 @@ class TurnstileValidator extends AbstractValidator
      * @var ConfigurationService|null
      */
     private $configurationService;
+    public function __construct(
+        private readonly EventDispatcher $eventDispatcher,
+    ) {}
 
     /**
      * Validate the Turnstile value from the request and add an error if not valid
      *
      * @param mixed $value The value
      */
+    #[\Override]
     protected function isValid($value): void
     {
         $response = $this->validateTurnstile();
 
-        if ((bool)($response['success'] ?? false) === false) {
+        if ((bool) ($response['success'] ?? false) === false) {
             if (empty($response['error-codes'])) {
                 $this->addError(
                     $this->translateErrorMessage(
                         'error_turnstile_generic',
-                        'turnstile'
+                        'turnstile',
                     ),
-                    1637268562
+                    1637268562,
                 );
             } else {
                 foreach ($response['error-codes'] as $errorCode) {
                     $this->addError(
                         $this->translateErrorMessage(
                             'error_turnstile_' . $errorCode,
-                            'turnstile'
+                            'turnstile',
                         ),
-                        1566206403
+                        1566206403,
                     );
                 }
             }
@@ -81,12 +88,22 @@ class TurnstileValidator extends AbstractValidator
     protected function validateTurnstile(): array
     {
         /** @var ServerRequestInterface $request */
-        $request = $GLOBALS['TYPO3_REQUEST'];
+        $request = (method_exists($this, 'getRequest') && $this->getRequest() instanceof ServerRequestInterface)
+            ? $this->getRequest()
+            : $GLOBALS['TYPO3_REQUEST'];
 
         $parsedBody = $request->getParsedBody();
+        $parsedBody = is_array($parsedBody) ? $parsedBody : [];
 
-        $token = $parsedBody['cf-turnstile-response'] ?? null;
-        if ($token === null) {
+        /** @var mixed $tokenRaw */
+        $tokenRaw = $parsedBody['cf-turnstile-response'] ?? null;
+
+        if (!is_scalar($tokenRaw) || empty($tokenRaw)) {
+            return ['success' => false, 'error-codes' => ['invalid-post-form']];
+        }
+
+        $token = trim((string) $tokenRaw);
+        if ($token === '') {
             return ['success' => false, 'error-codes' => ['invalid-post-form']];
         }
 
@@ -107,13 +124,13 @@ class TurnstileValidator extends AbstractValidator
                 GeneralUtility::makeInstance(HttpFactory::class),
             ),
             $this->getConfigurationService()->getPrivateKey(),
-            (string)Uuid::uuid4()
+            (string) Uuid::uuid4(),
         );
 
         $response = $turnstile->verify(
             $token,
             $ip,
-            $this->getConfigurationService()->getChallengeTimeout()
+            $this->getConfigurationService()->getChallengeTimeout(),
         );
 
         return [
@@ -125,10 +142,11 @@ class TurnstileValidator extends AbstractValidator
     /**
      * @codeCoverageIgnore
      */
-    protected function translateErrorMessage($translateKey, $extensionName, $arguments = []): string
+    #[\Override]
+    protected function translateErrorMessage(string $translateKey, string $extensionName = '', array $arguments = []): string
     {
         $event = new TranslateErrorMessageEvent($translateKey);
-        GeneralUtility::makeInstance(EventDispatcher::class)->dispatch($event);
+        $this->eventDispatcher->dispatch($event);
 
         $message = $event->getMessage();
         if (!empty($message)) {
@@ -138,16 +156,14 @@ class TurnstileValidator extends AbstractValidator
         return LocalizationUtility::translate(
             $translateKey,
             $extensionName,
-            $arguments
+            $arguments,
         ) ?? 'Validating Turnstile failed.';
     }
 
     private function getConfigurationService(): ConfigurationService
     {
         if (!($this->configurationService instanceof ConfigurationService)) {
-            /** @var ConfigurationService $configurationService */
-            $configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
-            $this->configurationService = $configurationService;
+            $this->configurationService = GeneralUtility::makeInstance(ConfigurationService::class);
         }
         return $this->configurationService;
     }

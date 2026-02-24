@@ -36,7 +36,7 @@ class ConfigurationServiceTest extends TestCase
     /**
      * @var ConfigurationManager|ObjectProphecy
      */
-    private $configurationManager;
+    private ObjectProphecy $configurationManager;
 
     protected function setUp(): void
     {

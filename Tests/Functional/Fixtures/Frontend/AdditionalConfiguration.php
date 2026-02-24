@@ -14,5 +14,5 @@ $GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive(
             'transport_spool_type' => 'file',
             'transport_spool_filepath' => \TRITUM\Turnstile\Tests\Functional\FunctionalTestCase::MAIL_SPOOL_FOLDER,
         ],
-    ]
+    ],
 );

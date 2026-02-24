@@ -22,37 +22,25 @@ use TRITUM\Turnstile\Service\ConfigurationService;
 use TYPO3\CMS\Core\Page\AssetCollector;
 use TYPO3\CMS\Form\Domain\Runtime\FormRuntime;
 use TYPO3\CMS\Form\ViewHelpers\RenderRenderableViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
  * @codeCoverageIgnore maybe test with an acceptance test at a later point
+ * @psalm-suppress UnusedClass
  */
-class TurnstileViewHelper extends AbstractViewHelper
+class TurnstileViewHelper extends AbstractTagBasedViewHelper
 {
-    use CompileWithRenderStatic;
-
-    protected $escapeOutput = false;
-
-    /**
-     * @var ConfigurationService
-     */
-    private $configurationService;
-
-    /**
-     * @var AssetCollector
-     */
-    private $assetCollector;
-
-    public function __construct(ConfigurationService $configurationService, AssetCollector $assetCollector)
-    {
-        $this->configurationService = $configurationService;
-        $this->assetCollector = $assetCollector;
+    public function __construct(
+        protected readonly ConfigurationService $configurationService,
+        protected readonly AssetCollector $assetCollector,
+    ) {
+        parent::__construct();
     }
 
     /**
      * @return string
      */
+    #[\Override]
     public function render(): string
     {
         /** @var FormRuntime|null $formRuntime */
@@ -61,9 +49,7 @@ class TurnstileViewHelper extends AbstractViewHelper
             ->get(RenderRenderableViewHelper::class, 'formRuntime');
 
         if ($formRuntime instanceof FormRuntime) {
-            /**
-             * @psalm-suppress InternalMethod
-             */
+            /** @psalm-suppress InternalMethod */
             $renderingOptions = $formRuntime->getRenderingOptions();
             if (isset($renderingOptions['previewMode']) && $renderingOptions['previewMode'] === true) {
                 return '';
@@ -73,9 +59,28 @@ class TurnstileViewHelper extends AbstractViewHelper
         $this->assetCollector->addJavaScript(
             'turnstile',
             $this->configurationService->getApiScript(),
-            ['async' => '', 'defer' => '']
+            ['async' => '', 'defer' => ''],
         );
 
-        return '<div class="cf-turnstile" data-sitekey="' . $this->configurationService->getSiteKey() . '" data-theme="' . $this->configurationService->getTheme() . '"></div>';
+        if (method_exists($this->tag, 'setForceClosingTag')) {
+            $this->tag->setForceClosingTag(true);
+        }
+
+        // Add the "cf-turnstile" class while preserving any existing classes
+        $existingClass = trim((string) $this->tag->getAttribute('class'));
+        if (!preg_match('/(?:^|\s)cf-turnstile(?:\s|$)/', $existingClass)) {
+            $this->tag->addAttribute('class', trim($existingClass . ' cf-turnstile'));
+        }
+
+        // Set data-sitekey / data-theme, but respect values provided by the template
+        if (!$this->tag->hasAttribute('data-sitekey')) {
+            $this->tag->addAttribute('data-sitekey', $this->configurationService->getSiteKey());
+        }
+        if (!$this->tag->hasAttribute('data-theme')) {
+            $this->tag->addAttribute('data-theme', $this->configurationService->getTheme());
+        }
+
+        return $this->tag->render();
+
     }
 }
