@@ -62,9 +62,7 @@ class TurnstileViewHelper extends AbstractTagBasedViewHelper
             ['async' => '', 'defer' => ''],
         );
 
-        if (method_exists($this->tag, 'setForceClosingTag')) {
-            $this->tag->setForceClosingTag(true);
-        }
+        $this->tag->forceClosingTag(true);
 
         // Add the "cf-turnstile" class while preserving any existing classes
         $existingClass = trim((string) $this->tag->getAttribute('class'));
