@@ -9,12 +9,4 @@ plugin {
       privateKey = {$plugin.tx_turnstile.settings.privateKey}
     }
   }
-
-  tx_form {
-    settings {
-      yamlConfigurations {
-        1692719161 = EXT:turnstile/Configuration/Form/Yaml/BaseSetup.yaml
-      }
-    }
-  }
 }

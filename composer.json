@@ -18,13 +18,13 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-json": "*",
         "ramsey/uuid": "^4.7",
-        "typo3/cms-core": "^12.4.0 || ^13.4",
-        "typo3/cms-extbase": "^12.4.0 || ^13.4",
-        "typo3/cms-fluid": "^12.4.0 || ^13.4",
-        "typo3/cms-form": "^12.4.0 || ^13.4",
+        "typo3/cms-core": "^14.0",
+        "typo3/cms-extbase": "^14.0",
+        "typo3/cms-fluid": "^14.0",
+        "typo3/cms-form": "^14.0",
         "usarise/turnstile": "^0.4.1"
     },
     "require-dev": {
@@ -33,13 +33,13 @@
         "overtrue/phplint": "^2.0 || ^5.3 || ^9.0",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "^1.0",
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^11.5 || ^12.1 || ^13.0",
         "roave/security-advisories": "dev-latest",
-        "saschaegerer/phpstan-typo3": "^1.8",
+        "saschaegerer/phpstan-typo3": "^3.1",
         "symfony/polyfill-php83": "^1.28",
-        "typo3/cms-fluid-styled-content": "^12.4.x-dev || ^13.4.x-dev",
+        "typo3/cms-fluid-styled-content": "^14.0.x-dev",
         "typo3/coding-standards": "^0.8",
-        "typo3/testing-framework": "^8.x-dev",
+        "typo3/testing-framework": "^9.x-dev",
         "vimeo/psalm": "^5.0 || ^6.0",
         "zbateson/mail-mime-parser": "^2.0"
     },
@@ -113,8 +113,12 @@
     "extra": {
         "typo3/cms": {
             "extension-key": "turnstile",
+            "version": "3.0.0",
             "cms-package-dir": "{$vendor-dir}/typo3/cms",
-            "web-dir": ".build/web"
+            "web-dir": ".build/web",
+            "Package": {
+                "providesPackages": {}
+            }
         }
     }
 }

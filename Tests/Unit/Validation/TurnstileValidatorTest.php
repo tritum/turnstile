@@ -42,7 +42,6 @@ class TurnstileValidatorTest extends TestCase
         $this->eventDispatcher = $this->createMock(EventDispatcher::class);
         $this->typo3request = $this->createMock(ServerRequestInterface::class);
         $this->typo3request->method('getParsedBody')->willReturn([]);
-        $GLOBALS['TYPO3_REQUEST'] = $this->typo3request;
     }
 
     protected function tearDown(): void
@@ -52,15 +51,16 @@ class TurnstileValidatorTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::isValid
      */
+    #[Test]
     public function validateReturnsErrorIfPostResponseFieldIsEmpty(): void
     {
         $subject = $this->getMockBuilder(TurnstileValidator::class)
             ->setConstructorArgs([$this->eventDispatcher])
             ->onlyMethods(['translateErrorMessage'])
             ->getMock();
+        $subject->setRequest($this->typo3request);
 
         $result = $subject->validate(1);
         $errors = $result->getErrors();
@@ -89,10 +89,10 @@ class TurnstileValidatorTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider
      * @covers ::isValid
      */
+    #[Test]
+    #[DataProvider('validateReturnsErrorIfVerificationRequestReturnsErrorDataProvider')]
     public function validateReturnsErrorIfVerificationRequestReturnsError(
         array $responseData,
         int $expectedErrorCode,

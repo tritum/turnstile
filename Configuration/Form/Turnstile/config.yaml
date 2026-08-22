@@ -1,3 +1,7 @@
+name: tritum/turnstile
+label: 'Turnstile for EXT:form'
+priority: 100
+
 TYPO3:
   CMS:
     Form:
@@ -81,7 +85,7 @@ TYPO3:
                       numbersOfColumnsToUse:
                         label: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.numbersOfColumnsToUse.label'
                         propertyPath: 'properties.gridColumnClassAutoConfiguration.viewPorts.{@viewPortIdentifier}.numbersOfColumnsToUse'
-                        fieldExplanationText: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.numbersOfColumnsToUse.fieldExplanationText'
+                        description: 'formEditor.elements.FormElement.editor.gridColumnViewPortConfiguration.numbersOfColumnsToUse.fieldExplanationText'
                   900:
                     identifier: 'validators'
                     templateName: 'Inspector-ValidatorsEditor'

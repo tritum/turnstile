@@ -8,13 +8,13 @@ $EM_CONF[$_EXTKEY] = [
     'author' => 'dreistrom.land AG',
     'author_email' => 'hello@dreistrom.land',
     'author_company' => 'dreistrom.land AG',
-    'version' => '2.0.0',
+    'version' => '3.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.00-13.9.9',
-            'extbase' => '12.4.00-13.9.9',
-            'fluid' => '12.4.00-13.9.9',
-            'form' => '12.4.00-13.9.9',
+            'typo3' => '14.0.00-14.9.99',
+            'extbase' => '14.0.00-14.9.99',
+            'fluid' => '14.0.00-14.9.99',
+            'form' => '14.0.00-14.9.99',
         ],
     ],
 ];

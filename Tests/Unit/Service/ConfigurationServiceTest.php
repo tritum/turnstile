@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Unit\Service;
 
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -46,10 +47,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getSiteKey
      */
+    #[Test]
     public function getSiteKeyThrowsExceptionIfKeyNotSet(): void
     {
         putenv('TURNSTILE_SITE_KEY');
@@ -60,10 +61,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getSiteKey
      */
+    #[Test]
     public function getSiteKeyReturnsKeyFromSettings(): void
     {
         $expectedKey = 'my_superb_key';
@@ -78,10 +79,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getSiteKey
      */
+    #[Test]
     public function getSiteKeyReturnsKeyFromEnv(): void
     {
         $expectedKey = 'my_superb_key';
@@ -94,10 +95,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getPrivateKey
      */
+    #[Test]
     public function getPrivateKeyThrowsExceptionIfKeyNotSet(): void
     {
         $this->expectException(MissingKeyException::class);
@@ -106,10 +107,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getPrivateKey
      */
+    #[Test]
     public function getPrivateKeyReturnsKeyFromSettings(): void
     {
         $expectedKey = 'my_superb_key';
@@ -124,10 +125,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getPrivateKey
      */
+    #[Test]
     public function getPrivateKeyReturnsKeyFromEnv(): void
     {
         $expectedKey = 'my_superb_key';
@@ -140,10 +141,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getApiScript
      */
+    #[Test]
     public function getApiScriptThrowsExceptionIfKeyNotSet(): void
     {
         $this->expectException(MissingKeyException::class);
@@ -152,11 +153,11 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getApiScript
      * @covers ::appendSiteLanguage
      */
+    #[Test]
     public function getApiScriptReturnsKeyFromSettings(): void
     {
         $expectedScript = 'https://turnstile.com/1/api.js';
@@ -171,12 +172,12 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getApiScript
      * @covers ::appendSiteLanguage
      * @covers ::getServerRequest
      */
+    #[Test]
     public function getApiScriptReturnsKeyFromEnv(): void
     {
         $expectedScript = 'https://turnstile.com/1/api.js';
@@ -189,10 +190,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::sendUserIpAddress
      */
+    #[Test]
     public function sendUserIpAddressReturnsKeyFromSettings(): void
     {
         $expected = false;
@@ -207,10 +208,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::sendUserIpAddress
      */
+    #[Test]
     public function sendUserIpAddressReturnsKeyFromEnv(): void
     {
         $expected = false;
@@ -223,10 +224,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getChallengeTimeout
      */
+    #[Test]
     public function getChallengeTimeoutReturnsKeyFromSettings(): void
     {
         $expected = 500;
@@ -241,10 +242,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getChallengeTimeout
      */
+    #[Test]
     public function getChallengeTimeoutReturnsKeyFromEnv(): void
     {
         $expected = 500;
@@ -257,10 +258,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getTheme
      */
+    #[Test]
     public function getThemeReturnsKeyFromSettings(): void
     {
         $expected = 'dark';
@@ -275,10 +276,10 @@ class ConfigurationServiceTest extends TestCase
     }
 
     /**
-     * @test
      * @covers ::__construct
      * @covers ::getTheme
      */
+    #[Test]
     public function getThemeReturnsKeyFromEnv(): void
     {
         $expected = 'dark';

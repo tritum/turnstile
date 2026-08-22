@@ -23,6 +23,9 @@ use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 
 class ConfigurationService
 {
+    /**
+     * @var array<array-key, mixed>|null
+     */
     private ?array $settings = null;
 
     /**
@@ -39,16 +42,13 @@ class ConfigurationService
     }
 
     /**
-     * @return string
      * @throws MissingKeyException
      */
     public function getSiteKey(): string
     {
-        $siteKey = !empty($this->settings['siteKey'])
-            ? $this->settings['siteKey']
-            : \getenv('TURNSTILE_SITE_KEY');
+        $siteKey = $this->resolveSetting('siteKey', 'TURNSTILE_SITE_KEY');
 
-        if (empty($siteKey)) {
+        if ($siteKey === '') {
             throw new MissingKeyException(
                 'Turnstile site key not defined',
                 1603034266,
@@ -59,16 +59,13 @@ class ConfigurationService
     }
 
     /**
-     * @return string
      * @throws MissingKeyException
      */
     public function getPrivateKey(): string
     {
-        $privateKey = !empty($this->settings['privateKey'])
-            ? $this->settings['privateKey']
-            : \getenv('TURNSTILE_PRIVATE_KEY');
+        $privateKey = $this->resolveSetting('privateKey', 'TURNSTILE_PRIVATE_KEY');
 
-        if (empty($privateKey)) {
+        if ($privateKey === '') {
             throw new MissingKeyException(
                 'Turnstile private key not defined',
                 1603034285,
@@ -79,15 +76,13 @@ class ConfigurationService
     }
 
     /**
-     * @return string
      * @throws MissingKeyException
      */
     public function getApiScript(): string
     {
-        $apiScript = !empty($this->settings['apiScript'])
-            ? $this->settings['apiScript']
-            : \getenv('TURNSTILE_API_SCRIPT');
-        if (empty($apiScript)) {
+        $apiScript = $this->resolveSetting('apiScript', 'TURNSTILE_API_SCRIPT');
+
+        if ($apiScript === '') {
             throw new MissingKeyException(
                 'turnstile api script not defined',
                 1603034329,
@@ -99,28 +94,33 @@ class ConfigurationService
 
     public function sendUserIpAddress(): bool
     {
-        $sendIp = !empty($this->settings['sendIp'])
-            ? $this->settings['sendIp']
-            : \getenv('TURNSTILE_SEND_IP');
-
-        return (bool) $sendIp;
+        return (bool) $this->resolveSetting('sendIp', 'TURNSTILE_SEND_IP');
     }
 
     public function getChallengeTimeout(): int
     {
-        $challengeTimeout = !empty($this->settings['challengeTimeout'])
-            ? $this->settings['challengeTimeout']
-            : \getenv('TURNSTILE_CHALLENGE_TIMEOUT');
+        $challengeTimeout = $this->resolveSetting('challengeTimeout', 'TURNSTILE_CHALLENGE_TIMEOUT');
 
-        return (int) (empty($challengeTimeout) ? 300 : $challengeTimeout);
+        return $challengeTimeout === '' ? 300 : (int) $challengeTimeout;
     }
 
     public function getTheme(): string
     {
-        $theme = !empty($this->settings['theme'])
-            ? $this->settings['theme']
-            : \getenv('TURNSTILE_THEME');
+        $theme = $this->resolveSetting('theme', 'TURNSTILE_THEME');
 
-        return empty($theme) ? 'light' : $theme;
+        return $theme === '' ? 'light' : $theme;
+    }
+
+    /**
+     * Resolves a scalar setting from TypoScript, falling back to an environment variable.
+     */
+    private function resolveSetting(string $settingKey, string $envVar): string
+    {
+        $value = $this->settings[$settingKey] ?? null;
+        if (!is_scalar($value) || empty($value)) {
+            $value = \getenv($envVar);
+        }
+
+        return trim((string) $value);
     }
 }
