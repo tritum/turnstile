@@ -16,7 +16,7 @@ unset(
     $rules['@PER-CS3x0']
 );
 
-// Setze den gewünschten PER-Standard (empfohlen für TYPO3 12 + 13 Extensions)
+// Setze den gewünschten PER-Standard (empfohlen für TYPO3 14 Extensions)
 $rules['@PER-CS2x0'] = true;
 
 $config->setRules($rules);

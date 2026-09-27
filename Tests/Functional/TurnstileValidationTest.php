@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace TRITUM\Turnstile\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use TRITUM\Turnstile\Tests\Functional\Form\DataExtractor;
 use TRITUM\Turnstile\Tests\Functional\Form\DataPusher;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
@@ -60,10 +62,8 @@ class TurnstileValidationTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider
-     */
+    #[Test]
+    #[DataProvider('validationFailsOnMultiStepFormIfTurnstileParametersAreMissingDataProvider')]
     public function validationFailsOnMultiStepFormIfTurnstileParametersAreMissing(
         array $formData,
         array $formDataNoPrefix,
@@ -146,10 +146,8 @@ class TurnstileValidationTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider
-     */
+    #[Test]
+    #[DataProvider('validationFailsOnMultiStepFormIfTurnstileParametersAreInvalidDataProvider')]
     public function validationFailsOnMultiStepFormIfTurnstileParametersAreInvalid(
         array $formData,
         array $formDataNoPrefix,
@@ -204,9 +202,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validationSuccessfulOnMultiStepFormIfTurnstileParametersAreValid(): void
     {
         putenv('TURNSTILE_PRIVATE_KEY=' . self::PRIVATE_KEY_ALWAYS_PASS);
@@ -273,10 +269,8 @@ class TurnstileValidationTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider
-     */
+    #[Test]
+    #[DataProvider('validationFailsOnSingleStepFormIfTurnstileParametersAreMissingDataProvider')]
     public function validationFailsOnSingleStepFormIfTurnstileParametersAreMissing(
         array $formData,
         array $formDataNoPrefix,
@@ -359,10 +353,8 @@ class TurnstileValidationTest extends FunctionalTestCase
         ];
     }
 
-    /**
-     * @test
-     * @dataProvider validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider
-     */
+    #[Test]
+    #[DataProvider('validationFailsOnSingleStepFormIfTurnstileParametersAreInvalidDataProvider')]
     public function validationFailsOnSingleStepFormIfTurnstileParametersAreInvalid(
         array $formData,
         array $formDataNoPrefix,
@@ -409,9 +401,7 @@ class TurnstileValidationTest extends FunctionalTestCase
         self::assertCount(0, $this->getMailSpoolMessages());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validationSuccessfulOnSingleStepFormIfTurnstileParametersAreValid(): void
     {
         putenv('TURNSTILE_PRIVATE_KEY=' . self::PRIVATE_KEY_ALWAYS_PASS);

@@ -44,9 +44,8 @@ class TurnstileViewHelper extends AbstractTagBasedViewHelper
     public function render(): string
     {
         /** @var FormRuntime|null $formRuntime */
-        $formRuntime = $this->renderingContext
-            ->getViewHelperVariableContainer()
-            ->get(RenderRenderableViewHelper::class, 'formRuntime');
+        $formRuntime = $this->viewHelperVariableContainer
+            ?->get(RenderRenderableViewHelper::class, 'formRuntime');
 
         if ($formRuntime instanceof FormRuntime) {
             /** @psalm-suppress InternalMethod */

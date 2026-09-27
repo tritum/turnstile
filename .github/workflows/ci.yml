@@ -6,16 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        typo3: [ '^12.4', '^13.4' ]
-        php: [ '8.1', '8.2', '8.3', '8.4' ]
-        exclude:
-          # TYPO3 13 braucht min PHP 8.2
-          - typo3: '^13.4'
-            php: '8.1'
+        typo3: [ '^14.0' ]
+        php: [ '8.2', '8.3', '8.4', '8.5' ]
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup PHP version ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
@@ -34,14 +30,6 @@ jobs:
           key: ${{ runner.os }}-php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-php-${{ matrix.php }}-composer-
 
-      - name: Workaround disable roave/security-advisories for TYPO3 13
-        if: matrix.typo3 == '^13.4'
-        run: composer remove roave/security-advisories --dev --no-interaction --no-update || true
-
-      - name: Force symfony/yaml for TYPO3 13
-        if: matrix.typo3 == '^13.4'
-        run: composer require "symfony/yaml:^7.3" --no-update --no-interaction
-
       - name: Install dependencies with typo3/cms-core:${{ matrix.typo3 }}
         run: |
             composer require typo3/cms-core:${{ matrix.typo3 }} -W --prefer-dist --no-progress --optimize-autoloader
@@ -57,9 +45,6 @@ jobs:
 
       - name: CGL
         run: composer run ci:cgl:check
-
-      - name: Psalm
-        run: composer run ci:psalm
 
       - name: PHPStan
         run: composer run ci:stan

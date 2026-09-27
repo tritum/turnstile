@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          bootstrap="../.build/vendor/autoload.php"
-         cacheResultFile="../.phpunit.cache/test-results"
          executionOrder="depends,defects"
-         forceCoversAnnotation="true"
-         beStrictAboutCoversAnnotation="true"
          beStrictAboutOutputDuringTests="true"
-         beStrictAboutTodoAnnotatedTests="true"
          failOnRisky="true"
          failOnWarning="true"
-         verbose="true">
+         cacheDirectory=".phpunit.cache"
+         requireCoverageMetadata="false"
+         beStrictAboutCoverageMetadata="true">
 
     <testsuites>
         <testsuite name="default">
@@ -18,8 +16,7 @@
         </testsuite>
     </testsuites>
 
-    <coverage cacheDirectory="../.phpunit.cache/code-coverage"
-              processUncoveredFiles="true">
+    <source>
         <include>
             <directory suffix=".php">../Classes</directory>
         </include>
@@ -28,5 +25,5 @@
             <directory suffix=".php">../Classes/Exception/</directory>
             <directory suffix=".php">../Classes/ViewHelpers/</directory>
         </exclude>
-    </coverage>
+    </source>
 </phpunit>

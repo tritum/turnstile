@@ -26,6 +26,7 @@ use TRITUM\Turnstile\Event\TranslateErrorMessageEvent;
 use TRITUM\Turnstile\Service\ConfigurationService;
 use Turnstile\Client\Client;
 use Turnstile\Turnstile;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
@@ -59,7 +60,7 @@ class TurnstileValidator extends AbstractValidator
     {
         $response = $this->validateTurnstile();
 
-        if ((bool) ($response['success'] ?? false) === false) {
+        if ($response['success'] === false) {
             if (empty($response['error-codes'])) {
                 $this->addError(
                     $this->translateErrorMessage(
@@ -83,14 +84,12 @@ class TurnstileValidator extends AbstractValidator
     }
 
     /**
-     * @return array
+     * @return array{success: bool, "error-codes": array<string>}
      */
     protected function validateTurnstile(): array
     {
         /** @var ServerRequestInterface $request */
-        $request = (method_exists($this, 'getRequest') && $this->getRequest() instanceof ServerRequestInterface)
-            ? $this->getRequest()
-            : $GLOBALS['TYPO3_REQUEST'];
+        $request = $this->getRequest();
 
         $parsedBody = $request->getParsedBody();
         $parsedBody = is_array($parsedBody) ? $parsedBody : [];
@@ -109,9 +108,10 @@ class TurnstileValidator extends AbstractValidator
 
         $ip = null;
         if ($this->getConfigurationService()->sendUserIpAddress()) {
-            $ip = $_SERVER['REMOTE_ADDR'] ?? null;
+            $remoteAddr = $_SERVER['REMOTE_ADDR'] ?? null;
+            $ip = is_string($remoteAddr) ? $remoteAddr : null;
             $normalizedParams = $request->getAttribute('normalizedParams');
-            if ($normalizedParams) {
+            if ($normalizedParams instanceof NormalizedParams) {
                 $ip = $normalizedParams->getRemoteAddress();
             }
         }
