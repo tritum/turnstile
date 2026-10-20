@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2023-08-21T13:37:00Z" target-language="nl">
+    <body>
+      <trans-unit id="error_turnstile_generic">
+        <source>Validating Turnstile failed.</source>
+        <target state="needs-translation">Validating Turnstile failed.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-post-form">
+        <source>Missing validation value in POST request.</source>
+        <target state="needs-translation">Missing validation value in POST request.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_missing-input-secret">
+        <source>The secret parameter was not passed.</source>
+        <target state="needs-translation">The secret parameter was not passed.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-input-secret">
+        <source>The secret parameter was invalid or did not exist.</source>
+        <target state="needs-translation">The secret parameter was invalid or did not exist.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_missing-input-response">
+        <source>The response parameter was not passed.</source>
+        <target state="needs-translation">The response parameter was not passed.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-input-response">
+        <source>The response parameter is invalid or has expired.</source>
+        <target state="needs-translation">The response parameter is invalid or has expired.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-widget-id">
+        <source>The widget ID extracted from the parsed site secret key was invalid or did not exist.</source>
+        <target state="needs-translation">The widget ID extracted from the parsed site secret key was invalid or did not exist.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-parsed-secret">
+        <source>The secret extracted from the parsed site secret key was invalid.</source>
+        <target state="needs-translation">The secret extracted from the parsed site secret key was invalid.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_bad-request">
+        <source>The request was rejected because it was malformed.</source>
+        <target state="needs-translation">The request was rejected because it was malformed.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_timeout-or-duplicate">
+        <source>The response parameter has already been validated before.</source>
+        <target state="needs-translation">The response parameter has already been validated before.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_internal-error">
+        <source>An internal error happened while validating the response. The request can be retried.</source>
+        <target state="needs-translation">An internal error happened while validating the response. The request can be retried.</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_challenge-timeout">
+        <source>Challenge timeout</source>
+        <target state="needs-translation">Challenge timeout</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_hostname-mismatch">
+        <source>Expected hostname did not match</source>
+        <target state="needs-translation">Expected hostname did not match</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_action-mismatch">
+        <source>Expected action did not match</source>
+        <target state="needs-translation">Expected action did not match</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_cdata-mismatch">
+        <source>Expected cdata did not match</source>
+        <target state="needs-translation">Expected cdata did not match</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-json">
+        <source>Invalid JSON received</source>
+        <target state="needs-translation">Invalid JSON received</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_unknown-error">
+        <source>Not a success, but no error codes received!</source>
+        <target state="needs-translation">Not a success, but no error codes received!</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

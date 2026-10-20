@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2023-08-21T13:37:00Z" target-language="t3">
+    <body>
+      <trans-unit id="error_turnstile_generic">
+        <source>Validating Turnstile failed.</source>
+        <target>crwdns367148:0crwdne367148:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-post-form">
+        <source>Missing validation value in POST request.</source>
+        <target>crwdns367150:0crwdne367150:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_missing-input-secret">
+        <source>The secret parameter was not passed.</source>
+        <target>crwdns367152:0crwdne367152:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-input-secret">
+        <source>The secret parameter was invalid or did not exist.</source>
+        <target>crwdns367154:0crwdne367154:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_missing-input-response">
+        <source>The response parameter was not passed.</source>
+        <target>crwdns367156:0crwdne367156:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-input-response">
+        <source>The response parameter is invalid or has expired.</source>
+        <target>crwdns367158:0crwdne367158:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-widget-id">
+        <source>The widget ID extracted from the parsed site secret key was invalid or did not exist.</source>
+        <target>crwdns367160:0crwdne367160:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-parsed-secret">
+        <source>The secret extracted from the parsed site secret key was invalid.</source>
+        <target>crwdns367162:0crwdne367162:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_bad-request">
+        <source>The request was rejected because it was malformed.</source>
+        <target>crwdns367164:0crwdne367164:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_timeout-or-duplicate">
+        <source>The response parameter has already been validated before.</source>
+        <target>crwdns367166:0crwdne367166:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_internal-error">
+        <source>An internal error happened while validating the response. The request can be retried.</source>
+        <target>crwdns367168:0crwdne367168:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_challenge-timeout">
+        <source>Challenge timeout</source>
+        <target>crwdns367170:0crwdne367170:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_hostname-mismatch">
+        <source>Expected hostname did not match</source>
+        <target>crwdns367172:0crwdne367172:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_action-mismatch">
+        <source>Expected action did not match</source>
+        <target>crwdns367174:0crwdne367174:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_cdata-mismatch">
+        <source>Expected cdata did not match</source>
+        <target>crwdns367176:0crwdne367176:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_invalid-json">
+        <source>Invalid JSON received</source>
+        <target>crwdns367178:0crwdne367178:0</target>
+      </trans-unit>
+      <trans-unit id="error_turnstile_unknown-error">
+        <source>Not a success, but no error codes received!</source>
+        <target>crwdns367180:0crwdne367180:0</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
